@@ -19,10 +19,14 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
 		<PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Icon3DPack.API.Core\Icon3DPack.API.Core.csproj" />
 	  <ProjectReference Include="..\Icon3DPack.API.Shared\Icon3DPack.API.Shared.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Persistence\Migrations\" />
 	</ItemGroup>
 </Project>

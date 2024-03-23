@@ -33,7 +33,7 @@ using var scope = app.Services.CreateScope();
 await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
 
 app.UseSwagger();
-app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "N-Tier V1"); });
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Icon3DPack.API V1"); });
 
 app.UseHttpsRedirection();
 
