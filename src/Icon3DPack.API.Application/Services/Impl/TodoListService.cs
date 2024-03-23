@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Icon3DPack.API.Application.Models;
-using Icon3DPack.API.Application.Models.TodoList;
-using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.Application.Exceptions;
+using Icon3DPack.API.Application.Models.BaseModel;
+using Icon3DPack.API.Application.Models.TodoList;
 using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.DataAccess.Repositories;
 using Icon3DPack.API.Shared.Services;

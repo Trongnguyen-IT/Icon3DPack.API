@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Icon3DPack.API.Application.Models;
+using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.TodoItem;
 using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.Core.Entities;

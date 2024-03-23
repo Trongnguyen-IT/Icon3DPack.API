@@ -3,16 +3,19 @@ using System;
 using Icon3DPack.API.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Icon3DPack.API.DataAccess.Migrations
+namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240323104805_init-filetype-ad-table")]
+    partial class initfiletypeadtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +29,7 @@ namespace Icon3DPack.API.DataAccess.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedOn")
@@ -40,6 +44,7 @@ namespace Icon3DPack.API.DataAccess.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("UpdatedBy")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedOn")

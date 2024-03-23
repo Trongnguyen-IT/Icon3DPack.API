@@ -1,8 +1,10 @@
-﻿namespace Icon3DPack.API.Application.Models.TodoList;
+﻿using Icon3DPack.API.Application.Models.BaseModel;
+
+namespace Icon3DPack.API.Application.Models.TodoList;
 
 public class UpdateTodoListModel
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
 }
 
 public class UpdateTodoListResponseModel : BaseResponseModel { }

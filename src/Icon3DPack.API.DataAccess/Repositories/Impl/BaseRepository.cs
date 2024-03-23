@@ -8,10 +8,10 @@ namespace Icon3DPack.API.DataAccess.Repositories.Impl;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly DatabaseContext Context;
-    protected readonly DbSet<TEntity> DbSet;
+    public readonly DatabaseContext Context;
+    public readonly DbSet<TEntity> DbSet;
 
-    protected BaseRepository(DatabaseContext context)
+    public BaseRepository(DatabaseContext context)
     {
         Context = context;
         DbSet = context.Set<TEntity>();

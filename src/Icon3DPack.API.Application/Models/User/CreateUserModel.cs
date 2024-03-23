@@ -1,4 +1,6 @@
-﻿namespace Icon3DPack.API.Application.Models.User;
+﻿using Icon3DPack.API.Application.Models.BaseModel;
+
+namespace Icon3DPack.API.Application.Models.User;
 
 public class CreateUserModel
 {

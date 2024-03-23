@@ -1,4 +1,5 @@
 ﻿using Icon3DPack.API.Application.Models;
+using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
 
 namespace Icon3DPack.API.Application.Services;

@@ -21,6 +21,8 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<TodoList> TodoLists { get; set; }
 
+    public DbSet<FileType> FileTypes { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

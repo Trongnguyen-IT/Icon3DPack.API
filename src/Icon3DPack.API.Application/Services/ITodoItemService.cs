@@ -1,4 +1,4 @@
-﻿using Icon3DPack.API.Application.Models;
+﻿using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.TodoItem;
 
 namespace Icon3DPack.API.Application.Services;

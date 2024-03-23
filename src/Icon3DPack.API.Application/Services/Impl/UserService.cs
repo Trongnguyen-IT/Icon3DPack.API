@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Icon3DPack.API.Application.Exceptions;
 using Icon3DPack.API.DataAccess.Identity;
+using Icon3DPack.API.Application.Models.BaseModel;
 
 namespace Icon3DPack.API.Application.Services.Impl;
 
