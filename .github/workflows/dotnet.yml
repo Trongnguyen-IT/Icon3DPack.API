@@ -15,7 +15,7 @@ jobs:
     runs-on: label-api
     
     env:
-      DOTNET_INSTALL_DIR: path/to/directory
+      DOTNET_INSTALL_DIR: "path/to/directory"
     
     steps:
     - uses: actions/checkout@v4
