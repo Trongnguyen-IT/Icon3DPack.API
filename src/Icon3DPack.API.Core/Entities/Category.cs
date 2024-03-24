@@ -6,6 +6,5 @@ namespace Icon3DPack.API.Core.Entities
     {
         public string Name { get; set; }
         public string ThumbnailUrl { get; set; }
-
     }
 }
