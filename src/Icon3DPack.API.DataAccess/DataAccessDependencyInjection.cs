@@ -25,8 +25,8 @@ public static class DataAccessDependencyInjection
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IFileTypeRepository, FileTypeRepository>();
         services.AddScoped<ITodoItemRepository, TodoItemRepository>();
         services.AddScoped<ITodoListRepository, TodoListRepository>();
     }

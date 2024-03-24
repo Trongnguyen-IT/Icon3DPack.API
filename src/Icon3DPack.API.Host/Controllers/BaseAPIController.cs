@@ -1,16 +1,16 @@
-﻿using Icon3DPack.API.Application.Models.TodoItem;
-using Icon3DPack.API.Application.Models.TodoList;
+﻿using AutoMapper;
 using Icon3DPack.API.Application.Models;
-using Icon3DPack.API.Application.Services;
-using Microsoft.AspNetCore.Mvc;
-using Icon3DPack.API.Application.Services.Impl;
-using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Application.Models.BaseModel;
-using AutoMapper;
+using Icon3DPack.API.Application.Services;
+using Icon3DPack.API.Core.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Icon3DPack.API.Host.Controllers
 {
-    public class BaseAPIController<TEntity, TRequest, TResponse> : ApiController where TEntity : BaseEntity where TRequest : BaseRequestModel where TResponse : BaseResponseModel
+    public class BaseAPIController<TEntity, TRequest, TResponse> : ApiController
+        where TEntity : BaseEntity
+        where TRequest : BaseRequestModel
+        where TResponse : BaseResponseModel
     {
         private readonly IBaseService<TEntity> _baseService;
         private readonly IMapper _mapper;
@@ -27,6 +27,11 @@ namespace Icon3DPack.API.Host.Controllers
             return Ok(ApiResult<IEnumerable<TResponse>>.Success(_mapper.Map<IEnumerable<TResponse>>(await _baseService.GetAllAsync())));
         }
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            return Ok(ApiResult<TResponse>.Success(_mapper.Map<TResponse>(await _baseService.GetFirstAsync(x => x.Id == id))));
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(TRequest createTodoListModel)

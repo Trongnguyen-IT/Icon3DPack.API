@@ -2,7 +2,7 @@
 {
     public class BaseRequestModel
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
     }
     public class BaseResponseModel
     {
