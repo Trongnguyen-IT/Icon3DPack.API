@@ -29,6 +29,7 @@ namespace Icon3DPack.API.DataAccess.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedOn")
@@ -83,7 +84,6 @@ namespace Icon3DPack.API.DataAccess.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -115,7 +115,6 @@ namespace Icon3DPack.API.DataAccess.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedOn")
