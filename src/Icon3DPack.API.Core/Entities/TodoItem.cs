@@ -11,13 +11,5 @@ namespace Icon3DPack.API.Core.Entities
         public bool IsDone { get; set; }
 
         public virtual TodoList List { get; set; }
-
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public string UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
     }
 }
