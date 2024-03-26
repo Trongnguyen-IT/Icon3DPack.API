@@ -4,7 +4,6 @@ using Icon3DPack.API.DataAccess.Repositories;
 using Icon3DPack.API.DataAccess.Repositories.Impl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
