@@ -26,8 +26,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
-    - name: Publish
-      run: dotnet publish -c Release -o /var/myapp
+      run: dotnet build --runtime linux-x64
     - name: Test
       run: dotnet test --no-build --verbosity normal
