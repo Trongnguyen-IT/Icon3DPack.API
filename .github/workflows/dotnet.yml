@@ -28,6 +28,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
     - name: Publish
-      run: dotnet publish -c Release -o /home/ubuntu/actions-runner-api/publish
+      run: dotnet publish -c Release -o /home/ubuntu/actions-runner-api/_work/publish
     - name: Test
       run: dotnet test --no-build --verbosity normal
