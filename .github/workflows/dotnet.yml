@@ -28,6 +28,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
     - name: Publish
-      run: dotnet publish -c Release -o /var/publish/icon3dpack
+      run: dotnet publish -c Release -o /publish/icon3dpack
     - name: Test
       run: dotnet test --no-build --verbosity normal
