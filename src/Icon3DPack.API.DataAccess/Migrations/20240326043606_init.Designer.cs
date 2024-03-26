@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240325051207_init")]
+    [Migration("20240326043606_init")]
     partial class init
     {
         /// <inheritdoc />
