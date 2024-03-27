@@ -13,7 +13,10 @@ jobs:
   build:
 
     runs-on: self-hosted
-   
+    
+    env:
+      DOTNET_INSTALL_DIR: "/usr/lib/dotnet"
+    
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
