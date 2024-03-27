@@ -31,3 +31,5 @@ jobs:
       run: dotnet publish -c Release -o /var/www/icon3dpack-app
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Start app
+      run: sudo systemctl start icon3dpack-app.service
