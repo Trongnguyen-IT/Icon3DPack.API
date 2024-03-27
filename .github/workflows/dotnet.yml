@@ -28,8 +28,8 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
     - name: Publish
-      run: dotnet publish -c Release -o /var/www/icon3dpack-app
+      run: dotnet publish -c Release -o /var/www/icon3dpack-app/publish
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Start app
-      run: sudo systemctl start icon3dpack-app.service
+      run: sudo systemctl restart icon3dpack-app.service
