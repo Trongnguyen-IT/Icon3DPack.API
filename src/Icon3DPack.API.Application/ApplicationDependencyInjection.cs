@@ -36,7 +36,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IFileTypeService, FileTypeService>();
 
         if (env.IsDevelopment())
-            services.AddScoped<IEmailService, DevEmailService>();
+            services.AddScoped<IEmailService, EmailService>();
         else
             services.AddScoped<IEmailService, EmailService>();
     }
