@@ -1,6 +1,6 @@
 ﻿using Icon3DPack.API.Application.Common.Email;
-using Icon3DPack.API.Application.Services;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace Icon3DPack.API.Application.Services.Impl;
@@ -9,9 +9,9 @@ public class EmailService : IEmailService
 {
     private readonly SmtpSettings _smtpSettings;
 
-    public EmailService(SmtpSettings smtpSettings)
+    public EmailService(IOptions<SmtpSettings> smtpSettings)
     {
-        _smtpSettings = smtpSettings;
+        _smtpSettings = smtpSettings.Value;
     }
 
     public async Task SendEmailAsync(EmailMessage emailMessage)

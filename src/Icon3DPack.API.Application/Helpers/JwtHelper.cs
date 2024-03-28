@@ -12,6 +12,8 @@ public static class JwtHelper
     public static string GenerateToken(ApplicationUser user, IConfiguration configuration)
     {
         var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
+        var issuer = configuration.GetValue<string>("JwtConfiguration:Issuer");
+        var audience = configuration.GetValue<string>("JwtConfiguration:Audience");
 
         var key = Encoding.ASCII.GetBytes(secretKey);
 
@@ -19,6 +21,8 @@ public static class JwtHelper
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Issuer = issuer,
+            Audience = audience,
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),

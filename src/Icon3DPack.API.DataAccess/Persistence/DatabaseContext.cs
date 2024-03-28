@@ -17,12 +17,11 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         _claimService = claimService;
     }
 
+    public DbSet<Post> Posts{ get; set; }
+    public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
-
     public DbSet<TodoItem> TodoItems { get; set; }
-
     public DbSet<TodoList> TodoLists { get; set; }
-
     public DbSet<FileType> FileTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)

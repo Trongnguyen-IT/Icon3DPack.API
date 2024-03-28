@@ -7,7 +7,7 @@ namespace Icon3DPack.API.Host.Controllers
 {
     public class CategoryController : BaseAPIController<Category, CategoryRequestModel, CategoryResponseModel>
     {
-        public CategoryController(IBaseService<Category> baseService, IMapper mapper) : base(baseService, mapper)
+        public CategoryController(ICategoryService categoryService, IMapper mapper) : base(categoryService, mapper)
         {
         }
     }

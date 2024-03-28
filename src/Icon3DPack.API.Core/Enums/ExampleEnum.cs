@@ -6,4 +6,9 @@
         ExampleOne,
         ExampleTwo
     }
+
+    public enum FileTypeEnum
+    {
+        FIG, PSD, PNG, Blender
+    }
 }

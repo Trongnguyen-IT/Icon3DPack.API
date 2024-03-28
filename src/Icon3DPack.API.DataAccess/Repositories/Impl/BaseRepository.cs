@@ -19,6 +19,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
+        entity.Id = Guid.NewGuid();
         var addedEntity = (await DbSet.AddAsync(entity)).Entity;
         await Context.SaveChangesAsync();
 

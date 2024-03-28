@@ -27,6 +27,8 @@ builder.Services.AddJwt(builder.Configuration);
 
 builder.Services.AddEmailConfiguration(builder.Configuration);
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();

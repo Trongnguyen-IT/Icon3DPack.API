@@ -13,10 +13,5 @@ namespace Icon3DPack.API.Application.Services.Impl
         public CategoryService(IBaseRepository<Category> baseRepository) : base(baseRepository)
         {
         }
-
-        //public override Task<List<Category>> GetAllAsync()
-        //{
-        //    return base.GetAllAsync();
-        //}
     }
 }

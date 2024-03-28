@@ -3,6 +3,7 @@ using Icon3DPack.API.Application.Models;
 using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.Core.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Icon3DPack.API.Host.Controllers
@@ -33,6 +34,7 @@ namespace Icon3DPack.API.Host.Controllers
             return Ok(ApiResult<TResponse>.Success(_mapper.Map<TResponse>(await _baseService.GetFirstAsync(x => x.Id == id))));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(TRequest createTodoListModel)
         {
@@ -40,6 +42,7 @@ namespace Icon3DPack.API.Host.Controllers
                 _mapper.Map<TResponse>(await _baseService.AddAsync(_mapper.Map<TEntity>(createTodoListModel)))));
         }
 
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAsync(Guid id, TRequest updateTodoListModel)
         {
@@ -52,6 +55,7 @@ namespace Icon3DPack.API.Host.Controllers
                 _mapper.Map<TResponse>(await _baseService.UpdateAsync(_mapper.Map<TEntity>(updateTodoListModel)))));
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {

@@ -2,7 +2,6 @@
 using Icon3DPack.API.Application.Models.FileType;
 using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Icon3DPack.API.Host.Controllers
 {
