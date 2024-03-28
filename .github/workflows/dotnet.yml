@@ -14,9 +14,7 @@ jobs:
 
     runs-on: self-hosted
     
-    env:
-      DOTNET_INSTALL_DIR: "./.dotnet"
-  
+   
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -28,8 +26,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
     - name: Publish
-      run: dotnet publish -c Release -o /var/www/icon3dpack-app/publish
+      run: dotnet publish -c Release
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Start app
-      run: sudo systemctl restart icon3dpack-app.service
