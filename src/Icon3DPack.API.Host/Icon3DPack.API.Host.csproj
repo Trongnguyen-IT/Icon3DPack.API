@@ -19,5 +19,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Icon3DPack.API.Application\Icon3DPack.API.Application.csproj" />
+	  <ProjectReference Include="..\Icon3DPack.API.AwsS3\Icon3DPack.API.AwsS3.csproj" />
 	</ItemGroup>
+	
 </Project>

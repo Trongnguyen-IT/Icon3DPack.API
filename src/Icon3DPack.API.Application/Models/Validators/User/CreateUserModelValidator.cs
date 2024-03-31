@@ -13,13 +13,13 @@ public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
     {
         _userManager = userManager;
 
-        RuleFor(u => u.Username)
-            .MinimumLength(UserValidatorConfiguration.MinimumUsernameLength)
-            .WithMessage($"Username should have minimum {UserValidatorConfiguration.MinimumUsernameLength} characters")
-            .MaximumLength(UserValidatorConfiguration.MaximumUsernameLength)
-            .WithMessage($"Username should have maximum {UserValidatorConfiguration.MaximumUsernameLength} characters")
-            .Must(UsernameIsUnique)
-            .WithMessage("Username is not available");
+        //RuleFor(u => u.Username)
+        //    .MinimumLength(UserValidatorConfiguration.MinimumUsernameLength)
+        //    .WithMessage($"Username should have minimum {UserValidatorConfiguration.MinimumUsernameLength} characters")
+        //    .MaximumLength(UserValidatorConfiguration.MaximumUsernameLength)
+        //    .WithMessage($"Username should have maximum {UserValidatorConfiguration.MaximumUsernameLength} characters")
+        //    .Must(UsernameIsUnique)
+        //    .WithMessage("Username is not available");
 
         RuleFor(u => u.Password)
             .MinimumLength(UserValidatorConfiguration.MinimumPasswordLength)

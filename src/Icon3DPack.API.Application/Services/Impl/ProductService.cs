@@ -11,7 +11,7 @@ namespace Icon3DPack.API.Application.Services.Impl
         {
             _categoryService = categoryService;
         }
-      
+
         public async override Task<Product> AddAsync(Product entity)
         {
             var product = await base.AddAsync(entity);
@@ -19,7 +19,7 @@ namespace Icon3DPack.API.Application.Services.Impl
 
             if (category != null)
             {
-                category.ProductAmount--;
+                category.ProductAmount++;
                 await _categoryService.UpdateAsync(category);
             }
 

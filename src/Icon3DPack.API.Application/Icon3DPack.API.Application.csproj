@@ -13,6 +13,10 @@
 		<PackageReference Include="MimeKit" Version="4.4.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\Icon3DPack.API.AwsS3\Icon3DPack.API.AwsS3.csproj" />
 	  <ProjectReference Include="..\Icon3DPack.API.DataAccess\Icon3DPack.API.DataAccess.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Models\NewFolder\" />
 	</ItemGroup>
 </Project>

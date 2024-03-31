@@ -6,6 +6,7 @@ namespace Icon3DPack.API.Core.Entities
     {
         public required string Name { get; set; }
         public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
         public bool IsShow { get; set; }
         public string[]? ShowTypes { get; set; }
 

@@ -1,16 +1,22 @@
-﻿using AutoMapper;
+﻿using Amazon;
+using AutoMapper;
+using Azure;
 using Icon3DPack.API.Application.Common.Email;
+using Icon3DPack.API.Application.Exceptions;
 using Icon3DPack.API.Application.Helpers;
 using Icon3DPack.API.Application.Models;
+using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
-using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.Application.Templates;
+using Icon3DPack.API.AwsS3.Models.AwsS3;
+using Icon3DPack.API.AwsS3.Services;
+using Icon3DPack.API.DataAccess.Identity;
+using Icon3DPack.API.Shared.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Icon3DPack.API.Application.Exceptions;
-using Icon3DPack.API.DataAccess.Identity;
-using Icon3DPack.API.Application.Models.BaseModel;
+using Microsoft.Extensions.Options;
 
 namespace Icon3DPack.API.Application.Services.Impl;
 
@@ -22,13 +28,19 @@ public class UserService : IUserService
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IClaimService _claimService;
+    private readonly IStorageService _storageService;
+    private readonly AwsS3Configuration _awsS3Configuration;
 
     public UserService(IMapper mapper,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration,
         ITemplateService templateService,
-        IEmailService emailService)
+        IEmailService emailService,
+        IClaimService claimService,
+        IStorageService storageService,
+        IOptions<AwsS3Configuration> awsS3Configuration)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -36,12 +48,15 @@ public class UserService : IUserService
         _configuration = configuration;
         _templateService = templateService;
         _emailService = emailService;
+        _claimService = claimService;
+        _storageService = storageService;
+        _awsS3Configuration = awsS3Configuration.Value;
     }
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
     {
         var user = _mapper.Map<ApplicationUser>(createUserModel);
-
+        user.UserName = createUserModel.Email;
         var result = await _userManager.CreateAsync(user, createUserModel.Password);
 
         if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()?.Description);
@@ -57,13 +72,13 @@ public class UserService : IUserService
 
         return new CreateUserResponseModel
         {
-            Id = Guid.Parse((await _userManager.FindByNameAsync(user.UserName)).Id)
+            Id = Guid.Parse((await _userManager.FindByEmailAsync(user.Email)).Id)
         };
     }
 
     public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == loginUserModel.Username);
+        var user = await _userManager.FindByEmailAsync(loginUserModel.Email);
 
         if (user == null)
             throw new NotFoundException("Username or password is incorrect");
@@ -114,6 +129,38 @@ public class UserService : IUserService
 
         if (!result.Succeeded)
             throw new BadRequestException(result.Errors.FirstOrDefault()?.Description);
+
+        return new BaseResponseModel
+        {
+            Id = Guid.Parse(user.Id)
+        };
+    }
+
+    public async Task<ProfileResponseModel> GetProfileAsync()
+    {
+        var userId = _claimService.GetUserId();
+
+        if (userId == null)
+            throw new NotFoundException("User does not exist anymore");
+
+
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        return _mapper.Map<ProfileResponseModel>(user); ;
+    }
+
+    public async Task<BaseResponseModel> UpdateProfileAsync(UpdateUserModel updateUserModel)
+    {
+        var user = await _userManager.FindByEmailAsync(updateUserModel.Email);
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        var updateUser = _mapper.Map(updateUserModel, user);
+
+        await _userManager.UpdateAsync(updateUser);
 
         return new BaseResponseModel
         {
