@@ -35,7 +35,8 @@ namespace Icon3DPack.API.Application.Services.Impl
         }
         public virtual async Task<List<TEntity>> GetAllAsync()
         {
-            return await _baseRepository.GetAllAsync(x => true);
+            var rewsul = await _baseRepository.GetAllAsync(x => true);
+            return rewsul;
 
         }
         public virtual async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)

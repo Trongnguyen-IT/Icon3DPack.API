@@ -2,7 +2,7 @@
 
 namespace Icon3DPack.API.Application.Services
 {
-    public interface IFileTypeService : IBaseService<FileType>
+    public interface IFileTypeService : IBaseService<FileExtension>
     {
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Icon3DPack.API.Host.Controllers
 {
-    public class BaseAPIController<TEntity, TRequest, TResponse> : ApiController
+    public class AdminBaseController<TEntity, TRequest, TResponse> : AdminController
         where TEntity : BaseEntity
         where TRequest : BaseAuditRequestModel
         where TResponse : BaseAuditResponseModel
@@ -16,7 +16,7 @@ namespace Icon3DPack.API.Host.Controllers
         private readonly IBaseService<TEntity> _baseService;
         private readonly IMapper _mapper;
 
-        public BaseAPIController(IBaseService<TEntity> baseService, IMapper mapper)
+        public AdminBaseController(IBaseService<TEntity> baseService, IMapper mapper)
         {
             _baseService = baseService;
             _mapper = mapper;
@@ -52,7 +52,7 @@ namespace Icon3DPack.API.Host.Controllers
             }
 
             return Ok(ApiResult<TResponse>.Success(
-                _mapper.Map<TResponse>(await _baseService.UpdateAsync(_mapper.Map<TEntity>(updateTodoListModel)))));
+            _mapper.Map<TResponse>(await _baseService.UpdateAsync(_mapper.Map<TEntity>(updateTodoListModel)))));
         }
 
         [Authorize]

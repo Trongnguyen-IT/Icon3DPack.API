@@ -9,7 +9,7 @@ namespace Icon3DPack.API.Application.MappingProfiles
         public ProductProfile()
         {
             CreateMap<ProductRequestModel, Product>();
-            CreateMap<Product, ProductResponseModel>();
+            CreateMap<Product, ProductResponseModel>().ForMember(p => p.CategoryName, s => s.MapFrom(pp => pp.Category.Name));
         }
     }
 }

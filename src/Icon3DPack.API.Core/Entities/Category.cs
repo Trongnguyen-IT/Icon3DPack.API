@@ -1,13 +1,14 @@
 ﻿using Icon3DPack.API.Core.Common;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Icon3DPack.API.Core.Entities
 {
     public class Category : BaseEntity
     {
-        public required string Name { get; set; }
+        public string Name { get; set; }
         public string? ImageUrl { get; set; }
         public int ProductAmount { get; set; }
 
-        public virtual ICollection<Product> Products { get; }
+        public virtual List<Product>? Products { get; set; }
     }
 }

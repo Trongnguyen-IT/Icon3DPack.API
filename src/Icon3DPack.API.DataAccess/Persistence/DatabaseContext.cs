@@ -24,7 +24,8 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<Category> Categories { get; set; }
     public DbSet<TodoItem> TodoItems { get; set; }
     public DbSet<TodoList> TodoLists { get; set; }
-    public DbSet<FileType> FileTypes { get; set; }
+    public DbSet<FileExtension>  FileExtensions { get; set; }
+    public DbSet<FileEntity> FileEntities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -113,11 +114,11 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
             {
                 case EntityState.Added:
                     entry.Entity.CreatedBy = _claimService.GetUserId();
-                    entry.Entity.CreatedOn = DateTime.Now;
+                    entry.Entity.CreatedTime = DateTime.Now;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = _claimService.GetUserId();
-                    entry.Entity.UpdatedOn = DateTime.Now;
+                    entry.Entity.ModifiedBy = _claimService.GetUserId();
+                    entry.Entity.ModifiedTime = DateTime.Now;
                     break;
             }
 

@@ -2,5 +2,7 @@
 
 namespace Icon3DPack.API.DataAccess.Repositories
 {
-    public interface IFileTypeRepository : IBaseRepository<FileExtension> { }
+    public interface ICategoryRepository : IBaseRepository<Category>
+    {
+    }
 }

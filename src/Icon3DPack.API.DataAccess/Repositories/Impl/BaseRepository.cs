@@ -17,7 +17,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         DbSet = context.Set<TEntity>();
     }
 
-    public async Task<TEntity> AddAsync(TEntity entity)
+    public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
         entity.Id = Guid.NewGuid();
         var addedEntity = (await DbSet.AddAsync(entity)).Entity;
@@ -26,7 +26,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return addedEntity;
     }
 
-    public async Task<TEntity> DeleteAsync(TEntity entity)
+    public virtual async Task<TEntity> DeleteAsync(TEntity entity)
     {
         var removedEntity = DbSet.Remove(entity).Entity;
         await Context.SaveChangesAsync();
@@ -34,7 +34,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return removedEntity;
     }
 
-    public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await DbSet.Where(predicate).ToListAsync();
     }
@@ -48,7 +48,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return await DbSet.Where(predicate).FirstOrDefaultAsync();
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(TEntity entity)
     {
         DbSet.Update(entity);
         await Context.SaveChangesAsync();

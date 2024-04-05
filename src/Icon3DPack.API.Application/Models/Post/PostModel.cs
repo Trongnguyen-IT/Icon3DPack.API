@@ -2,12 +2,12 @@
 
 namespace Icon3DPack.API.Application.Models.Post
 {
-    public class PostRequestModel : BaseRequestModel
+    public class PostRequestModel : BaseAuditRequestModel
     {
         public required string Name { get; set; }
         public string? Content { get; set; }
     }
-    public class PostResponseModel : BaseResponseModel
+    public class PostResponseModel : BaseAuditResponseModel
     {
         public required string Name { get; set; }
         public string? Content { get; set; }

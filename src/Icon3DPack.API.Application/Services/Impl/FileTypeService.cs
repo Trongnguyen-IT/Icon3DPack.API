@@ -3,7 +3,7 @@ using Icon3DPack.API.DataAccess.Repositories;
 
 namespace Icon3DPack.API.Application.Services.Impl
 {
-    public class FileTypeService : BaseService<FileType>, IFileTypeService
+    public class FileTypeService : BaseService<FileExtension>, IFileTypeService
     {
         private readonly IFileTypeRepository _fileTypeRepository;
 
