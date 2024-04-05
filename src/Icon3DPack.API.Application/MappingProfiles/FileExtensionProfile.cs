@@ -10,7 +10,7 @@ namespace Icon3DPack.API.Application.MappingProfiles
         {
             CreateMap<FileExtensionRequestModel, FileExtension>();
 
-            CreateMap<FileExtension, FileExtensionRequestModel>();
+            CreateMap<FileExtension, FileExtensionResponseModel>();
         }
     }
 }
