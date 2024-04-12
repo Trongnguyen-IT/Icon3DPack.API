@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240331112859_Initial-commit")]
-    partial class Initialcommit
+    [Migration("20240410033136_Initial-commit1")]
+    partial class Initialcommit1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,19 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -48,50 +53,83 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<int>("ProductAmount")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdatedBy")
+                    b.Property<string>("Slug")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileType", b =>
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("FileTypeCode")
+                    b.Property<Guid>("FileExtensionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileExtensionId")
+                        .IsUnique();
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FileEntities");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileExtension", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileTypes");
+                    b.ToTable("FileExtensions");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Post", b =>
@@ -104,21 +142,26 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Slug")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -131,14 +174,13 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
@@ -150,6 +192,12 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<bool>("IsShow")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -157,11 +205,8 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<string>("ShowTypes")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedBy")
+                    b.Property<string>("Slug")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -182,10 +227,9 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDone")
@@ -194,16 +238,16 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<Guid>("ListId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -219,22 +263,21 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -450,13 +493,30 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileEntity", b =>
+                {
+                    b.HasOne("Icon3DPack.API.Core.Entities.FileExtension", "FileExtension")
+                        .WithOne("FileEntity")
+                        .HasForeignKey("Icon3DPack.API.Core.Entities.FileEntity", "FileExtensionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Icon3DPack.API.Core.Entities.Product", "Product")
+                        .WithMany("FileEntities")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FileExtension");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Product", b =>
                 {
                     b.HasOne("Icon3DPack.API.Core.Entities.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });
@@ -526,6 +586,16 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileExtension", b =>
+                {
+                    b.Navigation("FileEntity");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.Product", b =>
+                {
+                    b.Navigation("FileEntities");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoList", b =>

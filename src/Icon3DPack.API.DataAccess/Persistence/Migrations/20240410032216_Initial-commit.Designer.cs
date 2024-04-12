@@ -4,6 +4,7 @@ using Icon3DPack.API.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240410032216_Initial-commit")]
+    partial class Initialcommit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +52,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.Property<int>("ProductAmount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Slug")
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -158,6 +158,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Slug")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -200,9 +201,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ShowTypes")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Slug")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

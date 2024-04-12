@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Icon3DPack.API.Core.Entities
 {
-    public class Product : BaseEntity
+    public class Product : BaseEntity, ISlug
     {
         public string Name { get; set; }
         public string? Description { get; set; }
@@ -16,5 +16,6 @@ namespace Icon3DPack.API.Core.Entities
         public virtual Category? Category { get; set; }
 
         public virtual List<FileEntity>? FileEntities { get; set; }
+        public string? Slug { get; set; }
     }
 }

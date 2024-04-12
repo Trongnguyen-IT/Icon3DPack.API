@@ -33,12 +33,12 @@ namespace Icon3DPack.API.Application.Services.Impl
         {
             return await _baseRepository.GetAllAsync(predicate);
         }
+
         public virtual async Task<List<TEntity>> GetAllAsync()
         {
-            var rewsul = await _baseRepository.GetAllAsync(x => true);
-            return rewsul;
-
+            return await _baseRepository.GetAllAsync(x => true);
         }
+
         public virtual async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _baseRepository.GetFirstAsync(predicate);

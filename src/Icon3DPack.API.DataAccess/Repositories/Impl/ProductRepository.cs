@@ -1,4 +1,5 @@
 ﻿using Icon3DPack.API.Core.Entities;
+using Icon3DPack.API.Core.Exceptions;
 using Icon3DPack.API.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +22,15 @@ namespace Icon3DPack.API.DataAccess.Repositories.Impl
         public override async Task<List<Product>> GetAllAsync(Expression<Func<Product, bool>> predicate)
         {
             return await _context.Products.Include(p => p.Category).ToListAsync();
+        }
+
+        public override async Task<Product> GetFirstAsync(Expression<Func<Product, bool>> predicate)
+        {
+            var entity = await _context.Products.Include(p => p.Category).Where(predicate).FirstOrDefaultAsync();
+
+            if (entity == null) throw new ResourceNotFoundException(typeof(Product));
+
+            return entity;
         }
 
         public override async Task<Product> AddAsync(Product entity)
@@ -55,6 +65,36 @@ namespace Icon3DPack.API.DataAccess.Repositories.Impl
             await _context.SaveChangesAsync();
 
             return removedEntity;
+        }
+
+        public async Task<PaginatedList<Product>> ProductFilter(string? name, string? categoryId, string? sortOrder, int? pageNumber, int? pageSize)
+        {
+            var query = _context.Products.AsQueryable().Where(p => (string.IsNullOrEmpty(name) || p.Name.ToLower() == name.ToLower())
+            && (string.IsNullOrEmpty(categoryId) || p.CategoryId.ToString() == categoryId));
+
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                switch (sortOrder)
+                {
+                    case "name_asc":
+                        query = query.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        query = query.OrderByDescending(p => p.Name);
+                        break;
+                    case "date_asc":
+                        query = query.OrderBy(p => p.CreatedTime);
+                        break;
+                    case "date_desc":
+                        query = query.OrderByDescending(p => p.CreatedTime);
+                        break;
+                    default:
+                        query = query.OrderByDescending(p => p.CreatedTime);
+                        break;
+                }
+            }
+
+            return await PaginatedList<Product>.CreateAsync(query, pageNumber ?? 1, pageSize ?? 200);
         }
     }
 }

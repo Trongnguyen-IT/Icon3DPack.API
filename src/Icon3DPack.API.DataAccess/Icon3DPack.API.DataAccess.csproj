@@ -26,7 +26,4 @@
 	  <ProjectReference Include="..\Icon3DPack.API.Core\Icon3DPack.API.Core.csproj" />
 	  <ProjectReference Include="..\Icon3DPack.API.Shared\Icon3DPack.API.Shared.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Persistence\Migrations\" />
-	</ItemGroup>
 </Project>

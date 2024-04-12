@@ -45,6 +45,7 @@ public class UsersController : ApiController
     }
 
     [HttpPut("{id:guid}/change-password")]
+    [Authorize]
     public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordModel changePasswordModel)
     {
         return Ok(ApiResult<BaseResponseModel>.Success(
@@ -58,7 +59,7 @@ public class UsersController : ApiController
         return Ok(ApiResult<ProfileResponseModel>.Success(await _userService.GetProfileAsync()));
     }
 
-    [HttpPost("update-profile")]
+    [HttpPut("update-profile")]
     [Authorize]
     public async Task<IActionResult> UpdateProfileAsync(UpdateUserModel updateUserModel)
     {

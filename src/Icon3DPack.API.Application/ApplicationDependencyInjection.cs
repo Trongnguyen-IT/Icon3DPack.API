@@ -34,6 +34,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IFileTypeService, FileTypeService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IPostService, PostService>();
 
         if (env.IsDevelopment())
             services.AddScoped<IEmailService, EmailService>();

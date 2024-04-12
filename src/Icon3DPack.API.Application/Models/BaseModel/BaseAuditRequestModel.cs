@@ -12,7 +12,7 @@
     {
         //public string CreatedBy { get; set; }
         public DateTime CreatedTime { get; set; }
-        public string? ModifiedTime { get; set; }
+        public DateTime? ModifiedTime { get; set; }
         //public DateTime? ModifiedBy { get; set; }
     }
 }

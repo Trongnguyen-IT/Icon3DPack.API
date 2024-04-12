@@ -39,13 +39,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return await DbSet.Where(predicate).ToListAsync();
     }
 
-    public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();
 
         if (entity == null) throw new ResourceNotFoundException(typeof(TEntity));
 
-        return await DbSet.Where(predicate).FirstOrDefaultAsync();
+        return entity;
     }
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity)
