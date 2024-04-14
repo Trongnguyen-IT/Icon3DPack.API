@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  icon3dpackdb:
+    image: mysql:8.0.36
+
+  icon3dpack.api.host:
+    image: ${DOCKER_REGISTRY-}icon3dpackapihost
+    build:
+      context: .
+      dockerfile: src/Icon3DPack.API.Host/Dockerfile
+
+volumes:
+  mysql-icon3dpack:

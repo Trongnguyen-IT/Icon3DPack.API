@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  icon3dpackdb:
+    container_name: icon3dpackdb
+    environment:
+      - MYSQL_ROOT_PASSWORD:Admin@123
+      - MYSQL_DATABASE:icon3dpack
+    restart: always
+    ports:
+        - "3306:3306"
+
+    volumes:
+      - mysql-icon3dpack:/var/lib/mysql
+
+  icon3dpack.api.host:
+    container_name: icon3dpack.api
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - Database__ConnectionString=Server=icon3dpackdb; port=3306; User ID=root; Password=Admin@123; Database=icon3dpack;SslMode=none
+      - AWS_profile=icon3dpack-profile
+      - AWS_region=ap-southeast-1
+    ports:
+      - "8000:8080"
+      - "8081"
+    depends_on:
+      - icon3dpackdb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ~/.aws:/root/.aws:ro
