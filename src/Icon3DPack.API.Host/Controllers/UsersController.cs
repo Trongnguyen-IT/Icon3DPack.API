@@ -3,7 +3,6 @@ using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.DataAccess.Identity;
-using Icon3DPack.API.Shared.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +12,10 @@ namespace Icon3DPack.API.Host.Controllers;
 public class UsersController : ApiController
 {
     private readonly IUserService _userService;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IClaimService _claimService;
 
-    public UsersController(IUserService userService, IClaimService claimService, UserManager<ApplicationUser> userManager)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
-        _claimService = claimService;
-        _userManager = userManager;
     }
 
     [HttpPost("register")]

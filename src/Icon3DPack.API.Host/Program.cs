@@ -32,13 +32,16 @@ builder.Services.AddDataAccess(builder.Configuration)
 // Add JWT configuration
 builder.Services.AddJwt(builder.Configuration);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin"));
+});
+
 builder.Services.AddEmailConfiguration(builder.Configuration);
 builder.Services.AddAwsS3Configuration(builder.Configuration);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-
-
-
 
 var app = builder.Build();
 

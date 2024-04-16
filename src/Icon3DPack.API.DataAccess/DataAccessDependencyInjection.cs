@@ -25,10 +25,11 @@ public static class DataAccessDependencyInjection
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-        services.AddScoped<IFileTypeRepository, FileTypeRepository>();
+        services.AddScoped<IFileExtensionRepository, FileExtensionRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ITodoItemRepository, TodoItemRepository>();
         services.AddScoped<ITodoListRepository, TodoListRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
     }
 
     private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -44,7 +45,7 @@ public static class DataAccessDependencyInjection
 
     private static void AddIdentity(this IServiceCollection services)
     {
-        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<DatabaseContext>();
 
         services.Configure<IdentityOptions>(options =>

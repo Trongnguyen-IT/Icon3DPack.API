@@ -7,11 +7,9 @@ namespace Icon3DPack.API.Core.Entities
     {
         public string FileUrl { get; set; }
 
-        [ForeignKey(nameof(FileExtension))]
         public Guid FileExtensionId { get; set; }
         public virtual FileExtension FileExtension { get; set; }
 
-        [ForeignKey(nameof(Product))]
         public Guid ProductId { get; set; }
         public virtual Product Product { get; set; }
     }

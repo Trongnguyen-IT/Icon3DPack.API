@@ -26,20 +26,49 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<TodoList> TodoLists { get; set; }
     public DbSet<FileExtension>  FileExtensions { get; set; }
     public DbSet<FileEntity> FileEntities { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<ProductTag> ProductTags { get; set; }
+    public DbSet<CategoryTag> CategoryTags { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
 
-        builder.Entity<ApplicationUser>(entity => { entity.ToTable(name: "Users"); });
-        builder.Entity<IdentityRole>(entity => { entity.ToTable(name: "Roles"); });
-        builder.Entity<IdentityUserRole<string>>(entity => { entity.ToTable("UserRoles"); });
-        builder.Entity<IdentityUserClaim<string>>(entity => { entity.ToTable("UserClaims"); });
-        builder.Entity<IdentityUserLogin<string>>(entity => { entity.ToTable("UserLogins"); });
-        builder.Entity<IdentityUserToken<string>>(entity => { entity.ToTable("UserTokens"); });
-        builder.Entity<IdentityRoleClaim<string>>(entity => { entity.ToTable("RoleClaims"); });
+        modelBuilder.Entity<ApplicationUser>(entity => { entity.ToTable(name: "Users"); });
+        modelBuilder.Entity<IdentityRole>(entity => { entity.ToTable(name: "Roles"); });
+        modelBuilder.Entity<IdentityUserRole<string>>(entity => { entity.ToTable("UserRoles"); });
+        modelBuilder.Entity<IdentityUserClaim<string>>(entity => { entity.ToTable("UserClaims"); });
+        modelBuilder.Entity<IdentityUserLogin<string>>(entity => { entity.ToTable("UserLogins"); });
+        modelBuilder.Entity<IdentityUserToken<string>>(entity => { entity.ToTable("UserTokens"); });
+        modelBuilder.Entity<IdentityRoleClaim<string>>(entity => { entity.ToTable("RoleClaims"); });
+
+        modelBuilder.Entity<ProductTag>()
+            .HasKey(pt => new { pt.ProductId, pt.TagId });
+
+        modelBuilder.Entity<ProductTag>()
+            .HasOne(pt => pt.Product)
+            .WithMany(p => p.ProductTags)
+            .HasForeignKey(pt => pt.ProductId);
+
+        modelBuilder.Entity<ProductTag>()
+            .HasOne(pt => pt.Tag)
+            .WithMany(t => t.ProductTags)
+            .HasForeignKey(pt => pt.TagId);
+
+        modelBuilder.Entity<CategoryTag>()
+           .HasKey(pt => new { pt.CategoryId, pt.TagId });
+
+        modelBuilder.Entity<CategoryTag>()
+            .HasOne(pt => pt.Category)
+            .WithMany(p => p.CategoryTags)
+            .HasForeignKey(pt => pt.CategoryId);
+
+        modelBuilder.Entity<CategoryTag>()
+            .HasOne(pt => pt.Tag)
+            .WithMany(t => t.CategoryTags)
+            .HasForeignKey(pt => pt.TagId);
 
         //builder.Entity<ApplicationUser>(entity =>
         //{

@@ -7,7 +7,7 @@ namespace Icon3DPack.API.Host.Controllers
 {
     public class FileExtensionController : BaseAPIController<FileExtension, FileExtensionRequestModel, FileExtensionResponseModel>
     {
-        public FileExtensionController(IFileTypeService baseService, IMapper mapper) : base(baseService, mapper)
+        public FileExtensionController(IFileExtensionService baseService, IMapper mapper) : base(baseService, mapper)
         {
         }
     }

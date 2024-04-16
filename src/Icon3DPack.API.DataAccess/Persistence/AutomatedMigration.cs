@@ -14,7 +14,8 @@ public static class AutomatedMigration
         if (context.Database.IsSqlServer()) await context.Database.MigrateAsync();
 
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        await DatabaseContextSeed.SeedDatabaseAsync(context, userManager);
+        await DatabaseContextSeed.SeedDatabaseAsync(context, userManager, roleManager);
     }
 }

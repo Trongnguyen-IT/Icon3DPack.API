@@ -25,7 +25,6 @@ namespace Icon3DPack.API.Host.Controllers
             _logger = logger;
         }
 
-
         [HttpPost("product-filter")]
         public async Task<IActionResult> ProductFilter([FromQuery] Dictionary<string, string> filter, int? pageNumber = 1, int? pageSize = 200)
         {

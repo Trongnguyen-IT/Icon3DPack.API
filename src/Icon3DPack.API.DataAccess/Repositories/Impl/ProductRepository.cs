@@ -21,12 +21,19 @@ namespace Icon3DPack.API.DataAccess.Repositories.Impl
 
         public override async Task<List<Product>> GetAllAsync(Expression<Func<Product, bool>> predicate)
         {
-            return await _context.Products.Include(p => p.Category).ToListAsync();
+            return await _context.Products.Include(p => p.Category)
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag)
+                .ToListAsync();
         }
 
         public override async Task<Product> GetFirstAsync(Expression<Func<Product, bool>> predicate)
         {
-            var entity = await _context.Products.Include(p => p.Category).Where(predicate).FirstOrDefaultAsync();
+            var entity = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag).Where(predicate)
+                .FirstOrDefaultAsync();
 
             if (entity == null) throw new ResourceNotFoundException(typeof(Product));
 

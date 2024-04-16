@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Icon3DPack.API.Host.Controllers
 {
+    [Authorize(Policy = "AdminOnly")]
     public class AdminBaseController<TEntity, TRequest, TResponse> : AdminController
         where TEntity : BaseEntity
         where TRequest : BaseAuditRequestModel
@@ -36,7 +37,7 @@ namespace Icon3DPack.API.Host.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(TRequest createTodoListModel)
+        public virtual async Task<IActionResult> CreateAsync(TRequest createTodoListModel)
         {
             return Ok(ApiResult<TResponse>.Success(
                 _mapper.Map<TResponse>(await _baseService.AddAsync(_mapper.Map<TEntity>(createTodoListModel)))));
@@ -44,7 +45,7 @@ namespace Icon3DPack.API.Host.Controllers
 
         [Authorize]
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, TRequest updateTodoListModel)
+        public virtual async Task<IActionResult> UpdateAsync(Guid id, TRequest updateTodoListModel)
         {
             if (id != updateTodoListModel.Id)
             {
@@ -57,7 +58,7 @@ namespace Icon3DPack.API.Host.Controllers
 
         [Authorize]
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public virtual async Task<IActionResult> DeleteAsync(Guid id)
         {
             return Ok(ApiResult<TResponse>.Success(
                 _mapper.Map<TResponse>(await _baseService.DeleteAsync(id))));

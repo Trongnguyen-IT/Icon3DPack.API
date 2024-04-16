@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240410032216_Initial-commit")]
+    [Migration("20240415085725_Initial-commit")]
     partial class Initialcommit
     {
         /// <inheritdoc />
@@ -53,9 +53,27 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<int>("ProductAmount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Slug")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.CategoryTag", b =>
+                {
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("CategoryId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("CategoryTags");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileEntity", b =>
@@ -88,8 +106,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileExtensionId")
-                        .IsUnique();
+                    b.HasIndex("FileExtensionId");
 
                     b.HasIndex("ProductId");
 
@@ -110,6 +127,9 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsPublish")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
@@ -158,7 +178,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Slug")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -172,7 +191,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
@@ -187,7 +206,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("IsShow")
+                    b.Property<bool>("IsPublish")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ModifiedBy")
@@ -200,7 +219,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ShowTypes")
+                    b.Property<string>("Slug")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -208,6 +227,36 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.ProductTag", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ProductId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ProductTags");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoItem", b =>
@@ -488,11 +537,30 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.CategoryTag", b =>
+                {
+                    b.HasOne("Icon3DPack.API.Core.Entities.Category", "Category")
+                        .WithMany("CategoryTags")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", "Tag")
+                        .WithMany("CategoryTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileEntity", b =>
                 {
                     b.HasOne("Icon3DPack.API.Core.Entities.FileExtension", "FileExtension")
-                        .WithOne("FileEntity")
-                        .HasForeignKey("Icon3DPack.API.Core.Entities.FileEntity", "FileExtensionId")
+                        .WithMany("FileEntities")
+                        .HasForeignKey("FileExtensionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -511,9 +579,30 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                 {
                     b.HasOne("Icon3DPack.API.Core.Entities.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.ProductTag", b =>
+                {
+                    b.HasOne("Icon3DPack.API.Core.Entities.Product", "Product")
+                        .WithMany("ProductTags")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", "Tag")
+                        .WithMany("ProductTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoItem", b =>
@@ -580,17 +669,28 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Category", b =>
                 {
+                    b.Navigation("CategoryTags");
+
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileExtension", b =>
                 {
-                    b.Navigation("FileEntity");
+                    b.Navigation("FileEntities");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Product", b =>
                 {
                     b.Navigation("FileEntities");
+
+                    b.Navigation("ProductTags");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.Tag", b =>
+                {
+                    b.Navigation("CategoryTags");
+
+                    b.Navigation("ProductTags");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoList", b =>

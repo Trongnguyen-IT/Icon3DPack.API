@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icon3DPack.API.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icon3DPack.API.Host", "src\Icon3DPack.API.Host\Icon3DPack.API.Host.csproj", "{6D4111EA-93FB-4C40-AB6D-B3E27F5EF8CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icon3DPack.API.AwsS3", "src\Icon3DPack.API.AwsS3\Icon3DPack.API.AwsS3.csproj", "{B455D0D3-4ACA-4EE8-89B7-F839FAD74F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icon3DPack.API.AwsS3", "src\Icon3DPack.API.AwsS3\Icon3DPack.API.AwsS3.csproj", "{B455D0D3-4ACA-4EE8-89B7-F839FAD74F24}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9E001B8B-6EF8-4667-B580-343B2D181CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{B455D0D3-4ACA-4EE8-89B7-F839FAD74F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B455D0D3-4ACA-4EE8-89B7-F839FAD74F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B455D0D3-4ACA-4EE8-89B7-F839FAD74F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E001B8B-6EF8-4667-B580-343B2D181CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E001B8B-6EF8-4667-B580-343B2D181CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E001B8B-6EF8-4667-B580-343B2D181CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E001B8B-6EF8-4667-B580-343B2D181CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

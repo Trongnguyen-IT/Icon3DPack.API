@@ -19,7 +19,7 @@ namespace Icon3DPack.API.Application.Services.Impl
 
         public override async Task<List<Post>> GetAllAsync()
         {
-            return (await  base.GetAllAsync()).OrderBy(p=>p.Order).ToList();
+            return (await  base.GetAllAsync()).OrderBy(p=>p.Order).ThenBy(p=>p.CreatedTime).ToList();
         }
     }
 }

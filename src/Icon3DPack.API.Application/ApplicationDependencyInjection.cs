@@ -31,10 +31,12 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClaimService, ClaimService>();
         services.AddScoped<ITemplateService, TemplateService>();
-        services.AddScoped<IFileTypeService, FileTypeService>();
+        services.AddScoped<IFileExtensionService, FileExtensionService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IPostService, PostService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ITagService, TagService>();
 
         if (env.IsDevelopment())
             services.AddScoped<IEmailService, EmailService>();
