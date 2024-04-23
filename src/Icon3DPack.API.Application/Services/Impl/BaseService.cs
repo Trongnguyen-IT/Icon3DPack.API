@@ -29,14 +29,9 @@ namespace Icon3DPack.API.Application.Services.Impl
             return await _baseRepository.DeleteAsync(entity);
         }
 
-        public virtual async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
-            return await _baseRepository.GetAllAsync(predicate);
-        }
-
-        public virtual async Task<List<TEntity>> GetAllAsync()
-        {
-            return await _baseRepository.GetAllAsync(x => true);
+            return await _baseRepository.GetAllAsync();
         }
 
         public virtual async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)

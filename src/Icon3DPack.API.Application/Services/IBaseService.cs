@@ -12,9 +12,7 @@ namespace Icon3DPack.API.Application.Services
     {
         Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate);
-
-        Task<List<TEntity>> GetAllAsync();
+        Task<IReadOnlyList<TEntity>> GetAllAsync();
 
         Task<TEntity> AddAsync(TEntity entity);
 

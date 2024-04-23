@@ -23,7 +23,7 @@ namespace Icon3DPack.API.Host.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public virtual async Task<IActionResult> GetAll()
         {
             return Ok(ApiResult<IEnumerable<TResponse>>.Success(_mapper.Map<IEnumerable<TResponse>>(await _baseService.GetAllAsync())));
         }

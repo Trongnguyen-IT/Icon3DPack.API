@@ -19,89 +19,68 @@ namespace Icon3DPack.API.DataAccess.Repositories.Impl
             _context = context;
         }
 
-        public override async Task<List<Product>> GetAllAsync(Expression<Func<Product, bool>> predicate)
-        {
-            return await _context.Products.Include(p => p.Category)
-                .Include(p => p.ProductTags)
-                .ThenInclude(p => p.Tag)
-                .ToListAsync();
-        }
+        //public override async Task<Product> AddAsync(Product entity)
+        //{
+        //    entity.Id = Guid.NewGuid();
+        //    var addedEntity = (await _context.Products.AddAsync(entity)).Entity;
+        //    var category = await _context.Categories.FirstOrDefaultAsync(p => p.Id == entity.CategoryId);
 
-        public override async Task<Product> GetFirstAsync(Expression<Func<Product, bool>> predicate)
-        {
-            var entity = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.ProductTags)
-                .ThenInclude(p => p.Tag).Where(predicate)
-                .FirstOrDefaultAsync();
+        //    if (category != null)
+        //    {
+        //        category.ProductAmount++;
+        //        _context.Categories.Update(category);
+        //    }
 
-            if (entity == null) throw new ResourceNotFoundException(typeof(Product));
+        //    await _dbContext.SaveChangesAsync();
 
-            return entity;
-        }
+        //    return addedEntity;
+        //}
 
-        public override async Task<Product> AddAsync(Product entity)
-        {
-            entity.Id = Guid.NewGuid();
-            var addedEntity = (await _context.Products.AddAsync(entity)).Entity;
-            var category = await _context.Categories.FirstOrDefaultAsync(p => p.Id == entity.CategoryId);
+        //public override async Task<Product> DeleteAsync(Product entity)
+        //{
+        //    var removedEntity = _context.Products.Remove(entity).Entity;
 
-            if (category != null)
-            {
-                category.ProductAmount++;
-                _context.Categories.Update(category);
-            }
+        //    var category = await _context.Categories.FirstOrDefaultAsync(p => p.Id == entity.CategoryId);
 
-            await Context.SaveChangesAsync();
+        //    if (category != null)
+        //    {
+        //        category.ProductAmount--;
+        //        _context.Categories.Update(category);
+        //    }
 
-            return addedEntity;
-        }
+        //    await _context.SaveChangesAsync();
 
-        public override async Task<Product> DeleteAsync(Product entity)
-        {
-            var removedEntity = _context.Products.Remove(entity).Entity;
+        //    return removedEntity;
+        //}
 
-            var category = await _context.Categories.FirstOrDefaultAsync(p => p.Id == entity.CategoryId);
+        //public async Task<PaginatedList<Product>> ProductFilter(string? name, string? categoryId, string? sortOrder, int? pageNumber, int? pageSize)
+        //{
+        //    var query = _context.Products.AsQueryable().Where(p => (string.IsNullOrEmpty(name) || p.Name.ToLower() == name.ToLower())
+        //    && (string.IsNullOrEmpty(categoryId) || p.CategoryId.ToString() == categoryId));
 
-            if (category != null)
-            {
-                category.ProductAmount--;
-                _context.Categories.Update(category);
-            }
+        //    if (!string.IsNullOrEmpty(sortOrder))
+        //    {
+        //        switch (sortOrder)
+        //        {
+        //            case "name_asc":
+        //                query = query.OrderBy(p => p.Name);
+        //                break;
+        //            case "name_desc":
+        //                query = query.OrderByDescending(p => p.Name);
+        //                break;
+        //            case "date_asc":
+        //                query = query.OrderBy(p => p.CreatedTime);
+        //                break;
+        //            case "date_desc":
+        //                query = query.OrderByDescending(p => p.CreatedTime);
+        //                break;
+        //            default:
+        //                query = query.OrderByDescending(p => p.CreatedTime);
+        //                break;
+        //        }
+        //    }
 
-            await _context.SaveChangesAsync();
-
-            return removedEntity;
-        }
-
-        public async Task<PaginatedList<Product>> ProductFilter(string? name, string? categoryId, string? sortOrder, int? pageNumber, int? pageSize)
-        {
-            var query = _context.Products.AsQueryable().Where(p => (string.IsNullOrEmpty(name) || p.Name.ToLower() == name.ToLower())
-            && (string.IsNullOrEmpty(categoryId) || p.CategoryId.ToString() == categoryId));
-
-            if (!string.IsNullOrEmpty(sortOrder))
-            {
-                switch (sortOrder)
-                {
-                    case "name_asc":
-                        query = query.OrderBy(p => p.Name);
-                        break;
-                    case "name_desc":
-                        query = query.OrderByDescending(p => p.Name);
-                        break;
-                    case "date_asc":
-                        query = query.OrderBy(p => p.CreatedTime);
-                        break;
-                    case "date_desc":
-                        query = query.OrderByDescending(p => p.CreatedTime);
-                        break;
-                    default:
-                        query = query.OrderByDescending(p => p.CreatedTime);
-                        break;
-                }
-            }
-
-            return await PaginatedList<Product>.CreateAsync(query, pageNumber ?? 1, pageSize ?? 200);
-        }
+        //    return await PaginatedList<Product>.CreateAsync(query, pageNumber ?? 1, pageSize ?? 200);
+        //}
     }
 }

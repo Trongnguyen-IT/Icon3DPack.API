@@ -1,4 +1,5 @@
 ﻿using Icon3DPack.API.Application.Models.Product;
+using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.DataAccess;
 
@@ -6,8 +7,8 @@ namespace Icon3DPack.API.Application.Services
 {
     public interface IProductService : IBaseService<Product>
     {
-        Task<PaginatedList<Product>> ProductFilter(string? name, string? categoryId, string? sortOrdere, int? pageNumber, int? pageSize);
+        Task<PaginationResult<Product>> GetAllPagingAsync();
+        Task<PaginationResult<Product>> ProductFilter(Dictionary<string, string> filter, int? pageNumber = 1, int? pageSize = 200);
         Task<Product> UpdateAsync(ProductRequestModel updateTodoListModel);
-
     }
 }

@@ -6,7 +6,7 @@ namespace Icon3DPack.API.Application.Services
     public interface ICategoryService : IBaseService<Category>
     {
         Task<Category> UpdateAsync(CategoryRequestModel updateTodoListModel);
-        Task IncreateProductAmountAsync(Guid id);
-        Task DecreaseProductAmountAsync(Guid id);
+        Task IncreateProductAmountAsync(Guid categoryId);
+        Task DecreaseProductAmountAsync(Guid categoryId);
     }
 }

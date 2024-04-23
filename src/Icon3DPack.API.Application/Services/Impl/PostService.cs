@@ -14,12 +14,12 @@ namespace Icon3DPack.API.Application.Services.Impl
 
         public async Task<Post> GetBySlug(string slug)
         {
-            return await _baseRepository.GetFirstAsync(p=>p.Slug == slug);
+            return await _baseRepository.GetFirstAsync(p => p.Slug == slug);
         }
 
-        public override async Task<List<Post>> GetAllAsync()
+        public override async Task<IReadOnlyList<Post>> GetAllAsync()
         {
-            return (await  base.GetAllAsync()).OrderBy(p=>p.Order).ThenBy(p=>p.CreatedTime).ToList();
+            return await _baseRepository.GetAllAsync(orderBy: p => p.OrderByDescending(p => p.Order).ThenByDescending(p => p.CreatedTime));
         }
     }
 }
