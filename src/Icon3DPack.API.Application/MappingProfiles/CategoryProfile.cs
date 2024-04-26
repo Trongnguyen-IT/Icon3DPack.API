@@ -8,8 +8,12 @@ namespace Icon3DPack.API.Application.MappingProfiles
     {
         public CategoryProfile()
         {
-            CreateMap<CategoryRequestModel, Category>().ForMember(p => p.CategoryTags, pp => pp.MapFrom(r => r.TagIds.Select(t => new CategoryTag { TagId = t })));
-            CreateMap<Category, CategoryResponseModel>().ForMember(p => p.Tags, pp => pp.MapFrom(c => c.CategoryTags.Select(ct => ct.Tag)));
+            CreateMap<CategoryRequestModel, Category>()
+                .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ForMember(p => p.CategoryTags, pp => pp.MapFrom(r => r.Tags.Select(t => new CategoryTag { TagId = t.Id })));
+
+            CreateMap<Category, CategoryResponseModel>()
+                .ForMember(c => c.ProductAmount, c => c.MapFrom(cc => cc.Products.Count));
         }
     }
 }

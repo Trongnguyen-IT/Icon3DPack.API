@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240415094232_Initial-commit1")]
-    partial class Initialcommit1
+    [Migration("20240426091749_Initial-commit")]
+    partial class Initialcommit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("ProductAmount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .HasColumnType("longtext");
@@ -100,6 +97,10 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("char(36)");
@@ -199,9 +200,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
@@ -600,21 +598,17 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.ProductTag", b =>
                 {
-                    b.HasOne("Icon3DPack.API.Core.Entities.Product", "Product")
+                    b.HasOne("Icon3DPack.API.Core.Entities.Product", null)
                         .WithMany("ProductTags")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", "Tag")
+                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", null)
                         .WithMany("ProductTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoItem", b =>

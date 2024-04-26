@@ -9,6 +9,7 @@ namespace Icon3DPack.API.Application.Services
     {
         Task<PaginationResult<Product>> GetAllPagingAsync();
         Task<PaginationResult<Product>> ProductFilter(Dictionary<string, string> filter, int? pageNumber = 1, int? pageSize = 200);
+       // Task<Product> AddAsync(ProductRequestModel createTodoListModel);
         Task<Product> UpdateAsync(ProductRequestModel updateTodoListModel);
     }
 }

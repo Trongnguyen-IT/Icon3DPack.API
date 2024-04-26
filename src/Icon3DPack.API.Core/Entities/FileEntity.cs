@@ -1,10 +1,10 @@
 ﻿using Icon3DPack.API.Core.Common;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Icon3DPack.API.Core.Entities
 {
     public class FileEntity : BaseEntity
     {
+        public string Name { get; set; }
         public string FileUrl { get; set; }
 
         public Guid FileExtensionId { get; set; }

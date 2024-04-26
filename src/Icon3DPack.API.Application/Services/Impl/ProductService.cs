@@ -3,6 +3,7 @@ using Icon3DPack.API.Application.Models.Product;
 using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.Core.Exceptions;
+using Icon3DPack.API.DataAccess.Persistence;
 using Icon3DPack.API.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -14,53 +15,56 @@ namespace Icon3DPack.API.Application.Services.Impl
         private readonly ICategoryService _categoryService;
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        public readonly DatabaseContext _dbContext;
 
         public ProductService(IProductRepository productRepository,
             ICategoryService categoryService,
+            DatabaseContext dbContext,
             IMapper mapper) : base(productRepository)
         {
             _categoryService = categoryService;
             _productRepository = productRepository;
             _mapper = mapper;
+            _dbContext = dbContext;
         }
 
         public override async Task<IReadOnlyList<Product>> GetAllAsync()
         {
             return await _productRepository.GetAllAsync(orderBy: p => p.OrderByDescending(pp => pp.CreatedTime),
                 include: p => p.Include(p => p.Category)
-                .Include(p => p.ProductTags)
-                .ThenInclude(pt => pt.Tag));
+                .Include(p => p.Tags));
         }
 
         public async Task<PaginationResult<Product>> GetAllPagingAsync()
         {
             return await _productRepository.GetPagedAsync(orderBy: p => p.OrderByDescending(pp => pp.CreatedTime),
                 include: p => p.Include(p => p.Category)
-                .Include(p => p.ProductTags)
-                .ThenInclude(pt => pt.Tag));
+                .Include(p => p.Tags));
         }
 
         public override async Task<Product> GetFirstAsync(Expression<Func<Product, bool>> predicate)
         {
-            return await _productRepository.GetFirstAsync(
+            var ressult = await _productRepository.GetFirstAsync(
                 predicate: predicate,
                 include: p => p.Include(p => p.Category)
-                .Include(p => p.ProductTags)
-                .ThenInclude(pt => pt.Tag));
+                .Include(p => p.FileEntities)
+                .Include(p => p.Tags));
+
+            return ressult;
         }
 
         public async override Task<Product> AddAsync(Product entity)
         {
             var newProduct = await _productRepository.AddAsync(entity);
-            await _categoryService.IncreateProductAmountAsync(entity.CategoryId);
 
             return newProduct;
         }
 
         public override async Task<Product> DeleteAsync(Guid id)
         {
-            var product = await _productRepository.GetFirstAsync(p => p.Id == id);
-            await _categoryService.DecreaseProductAmountAsync(product.CategoryId);
+            var product = await _productRepository.GetFirstAsync(p => p.Id == id, p => p.Include(pp => pp.ProductTags).Include(p => p.FileEntities));
+            if (product.ProductTags.Any()) _dbContext.ProductTags.RemoveRange(product.ProductTags);
+            if (product.FileEntities.Any()) _dbContext.FileEntities.RemoveRange(product.FileEntities);
 
             return await _productRepository.DeleteAsync(product);
         }
@@ -81,15 +85,18 @@ namespace Icon3DPack.API.Application.Services.Impl
 
         public async Task<Product> UpdateAsync(ProductRequestModel model)
         {
-            var product = await _productRepository.GetFirstAsync(p => p.Id == model.Id);
+            var product = await _productRepository.GetFirstAsync(p => p.Id == model.Id, p => p.Include(pp => pp.ProductTags).Include(p=>p.FileEntities));
 
             if ((product == null)) throw new ResourceNotFoundException(typeof(Product));
 
+            if (product.ProductTags.Any()) _dbContext.ProductTags.RemoveRange(product.ProductTags);
+            if (product.FileEntities.Any()) _dbContext.FileEntities.RemoveRange(product.FileEntities);
+
+            product.ProductTags.Clear();
+            product.FileEntities?.Clear();
+
             var productUpdate = _mapper.Map(model, product);
             await _productRepository.UpdateAsync(productUpdate);
-
-            await _categoryService.DecreaseProductAmountAsync(product.CategoryId);
-            await _categoryService.IncreateProductAmountAsync(model.CategoryId);
 
             return productUpdate;
         }
@@ -130,5 +137,6 @@ namespace Icon3DPack.API.Application.Services.Impl
 
             return result;
         }
+
     }
 }

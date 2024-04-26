@@ -1,19 +1,20 @@
 ﻿using Icon3DPack.API.Core.Common;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Icon3DPack.API.Core.Entities
 {
     public class Product : BaseEntity, ISlug
     {
         public string Name { get; set; }
-        public string? Description { get; set; }
+        //public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsPublish { get; set; } = true;
         public string? Slug { get; set; }
 
         public Guid CategoryId { get; set; }
         public virtual Category Category { get; set; }
-        public virtual ICollection<FileEntity>? FileEntities { get; set; } = new List<FileEntity>();
-        public virtual ICollection<ProductTag> ProductTags { get; set; } = new HashSet<ProductTag>();
+
+        public virtual ICollection<FileEntity>? FileEntities { get; set; } = [];
+        public virtual ICollection<Tag>? Tags { get; set; } = [];
+        public virtual ICollection<ProductTag>? ProductTags { get; set; } = [];
     }
 }

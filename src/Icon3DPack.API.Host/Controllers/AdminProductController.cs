@@ -18,6 +18,11 @@ namespace Icon3DPack.API.Host.Controllers
             _mapper = mapper;
         }
 
+        //public override async Task<IActionResult> CreateAsync(ProductRequestModel model)
+        //{
+        //    return Ok(ApiResult<ProductResponseModel>.Success(_mapper.Map<ProductResponseModel>((await _productService.AddAsync(model)))));
+        //}
+
         public override async Task<IActionResult> UpdateAsync(Guid id, ProductRequestModel model)
         {
             return Ok(ApiResult<ProductResponseModel>.Success(_mapper.Map<ProductResponseModel>((await _productService.UpdateAsync(model)))));

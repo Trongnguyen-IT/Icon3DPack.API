@@ -6,7 +6,11 @@ namespace Icon3DPack.API.Core.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<ProductTag> ProductTags { get; set; } = new HashSet<ProductTag>();
-        public virtual ICollection<CategoryTag> CategoryTags { get; set; } = new HashSet<CategoryTag>();
+
+        public virtual ICollection<Product> Products { get; set; } = [];
+        public virtual ICollection<ProductTag> ProductTags { get; set; } = [];
+
+        public virtual ICollection<Category> Categories { get; set; } = [];
+        public virtual ICollection<CategoryTag> CategoryTags { get; set; } = [];
     }
 }

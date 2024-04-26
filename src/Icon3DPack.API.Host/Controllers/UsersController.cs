@@ -1,8 +1,11 @@
-﻿using Icon3DPack.API.Application.Models;
+﻿using Amazon.Auth.AccessControlPolicy;
+using Icon3DPack.API.Application.Models;
 using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Services;
 using Icon3DPack.API.DataAccess.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +32,9 @@ public class UsersController : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> LoginAsync(LoginUserModel loginUserModel)
     {
-        return Ok(ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel)));
+        var result = ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel));
+       
+        return Ok(result);
     }
 
     [HttpPost("confirm-email")]

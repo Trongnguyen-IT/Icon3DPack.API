@@ -1,10 +1,7 @@
-﻿using Amazon;
-using AutoMapper;
-using Azure;
+﻿using AutoMapper;
 using Icon3DPack.API.Application.Common.Email;
 using Icon3DPack.API.Application.Exceptions;
 using Icon3DPack.API.Application.Helpers;
-using Icon3DPack.API.Application.Models;
 using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Templates;
@@ -12,9 +9,7 @@ using Icon3DPack.API.AwsS3.Models.AwsS3;
 using Icon3DPack.API.AwsS3.Services;
 using Icon3DPack.API.DataAccess.Identity;
 using Icon3DPack.API.Shared.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
@@ -29,8 +24,6 @@ public class UserService : IUserService
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IClaimService _claimService;
-    private readonly IStorageService _storageService;
-    private readonly AwsS3Configuration _awsS3Configuration;
 
     public UserService(IMapper mapper,
         UserManager<ApplicationUser> userManager,
@@ -38,9 +31,7 @@ public class UserService : IUserService
         IConfiguration configuration,
         ITemplateService templateService,
         IEmailService emailService,
-        IClaimService claimService,
-        IStorageService storageService,
-        IOptions<AwsS3Configuration> awsS3Configuration)
+        IClaimService claimService)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -49,8 +40,6 @@ public class UserService : IUserService
         _templateService = templateService;
         _emailService = emailService;
         _claimService = claimService;
-        _storageService = storageService;
-        _awsS3Configuration = awsS3Configuration.Value;
     }
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)

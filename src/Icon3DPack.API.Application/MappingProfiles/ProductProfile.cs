@@ -8,8 +8,15 @@ namespace Icon3DPack.API.Application.MappingProfiles
     {
         public ProductProfile()
         {
-            CreateMap<ProductRequestModel, Product>().ForMember(p => p.ProductTags, pp => pp.MapFrom(r => r.TagIds.Select(t => new ProductTag { TagId = t }))); 
-            CreateMap<Product, ProductResponseModel>().ForMember(p => p.CategoryName, s => s.MapFrom(pp => pp.Category.Name)).ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags.Select(pt => pt.Tag)));
+            CreateMap<ProductRequestModel, Product>()
+                .ForMember(p => p.Tags, p => p.Ignore())
+                .ForMember(p => p.ProductTags, pp => pp.MapFrom(r => r.Tags.Select(t => new ProductTag { TagId = t.Id })));
+
+            CreateMap<Product, ProductResponseModel>()
+                .ForMember(p => p.CategoryName,
+                    s => s.MapFrom(pp => pp.Category.Name));
+            //.ForMember(dest => dest.Tags,
+            //    opt => opt.MapFrom(src => src.ProductTags.Select(pt => pt.Tag)));
         }
     }
 }

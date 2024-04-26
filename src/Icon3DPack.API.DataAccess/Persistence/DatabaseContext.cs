@@ -24,7 +24,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<Category> Categories { get; set; }
     public DbSet<TodoItem> TodoItems { get; set; }
     public DbSet<TodoList> TodoLists { get; set; }
-    public DbSet<FileExtension>  FileExtensions { get; set; }
+    public DbSet<FileExtension> FileExtensions { get; set; }
     public DbSet<FileEntity> FileEntities { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<ProductTag> ProductTags { get; set; }
@@ -44,31 +44,25 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<IdentityUserToken<string>>(entity => { entity.ToTable("UserTokens"); });
         modelBuilder.Entity<IdentityRoleClaim<string>>(entity => { entity.ToTable("RoleClaims"); });
 
-        modelBuilder.Entity<ProductTag>()
-            .HasKey(pt => new { pt.ProductId, pt.TagId });
+        modelBuilder.Entity<Product>()
+            .HasMany(pt => pt.Tags)
+            .WithMany(p => p.Products)
+            .UsingEntity<ProductTag>();
 
-        modelBuilder.Entity<ProductTag>()
-            .HasOne(pt => pt.Product)
-            .WithMany(p => p.ProductTags)
-            .HasForeignKey(pt => pt.ProductId);
+        //modelBuilder.Entity<Product>()
+        //    .HasMany(e => e.Tags)
+        //    .WithMany(e => e.Products)
+        //    .UsingEntity<ProductTag>();
 
-        modelBuilder.Entity<ProductTag>()
-            .HasOne(pt => pt.Tag)
-            .WithMany(t => t.ProductTags)
-            .HasForeignKey(pt => pt.TagId);
+        //modelBuilder.Entity<Category>()
+        //   .HasMany(e => e.Tags)
+        //   .WithMany(e => e.Categories)
+        //   .UsingEntity<CategoryTag>();
 
-        modelBuilder.Entity<CategoryTag>()
-           .HasKey(pt => new { pt.CategoryId, pt.TagId });
-
-        modelBuilder.Entity<CategoryTag>()
-            .HasOne(pt => pt.Category)
-            .WithMany(p => p.CategoryTags)
-            .HasForeignKey(pt => pt.CategoryId);
-
-        modelBuilder.Entity<CategoryTag>()
-            .HasOne(pt => pt.Tag)
-            .WithMany(t => t.CategoryTags)
-            .HasForeignKey(pt => pt.TagId);
+        modelBuilder.Entity<Category>()
+            .HasMany(pt => pt.Tags)
+            .WithMany(p => p.Categories)
+            .UsingEntity<CategoryTag>();
 
         //builder.Entity<ApplicationUser>(entity =>
         //{

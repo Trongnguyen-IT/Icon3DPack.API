@@ -18,6 +18,12 @@ namespace Icon3DPack.API.Host.Controllers
             _categoryService = categoryService;
         }
 
+        //public override async Task<IActionResult> CreateAsync(CategoryRequestModel createTodoListModel)
+        //{
+        //    return Ok(ApiResult<CategoryResponseModel>.Success(
+        //        _mapper.Map<CategoryResponseModel>(await _categoryService.AddAsync(createTodoListModel))));
+        //}
+
         public override async Task<IActionResult> UpdateAsync(Guid id, CategoryRequestModel updateTodoListModel)
         {
             if (id != updateTodoListModel.Id)
@@ -26,7 +32,7 @@ namespace Icon3DPack.API.Host.Controllers
             }
 
             return Ok(ApiResult<CategoryResponseModel>.Success(
-            _mapper.Map<CategoryResponseModel>(await _categoryService.UpdateAsync(updateTodoListModel))));
+                _mapper.Map<CategoryResponseModel>(await _categoryService.UpdateAsync(updateTodoListModel))));
         }
     }
 }
