@@ -33,7 +33,7 @@ public class UsersController : ApiController
     public async Task<IActionResult> LoginAsync(LoginUserModel loginUserModel)
     {
         var result = ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel));
-       
+
         return Ok(result);
     }
 
@@ -64,5 +64,19 @@ public class UsersController : ApiController
     public async Task<IActionResult> UpdateProfileAsync(UpdateUserModel updateUserModel)
     {
         return Ok(ApiResult<BaseResponseModel>.Success(await _userService.UpdateProfileAsync(updateUserModel)));
+    }
+
+    [HttpPut("{id:guid}/update-notification/{isNotification:bool}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateNotificationAsync(Guid id, bool isNotification)
+    {
+        return Ok(ApiResult<BaseResponseModel>.Success(await _userService.UpdateNotificationAsync(id, isNotification)));
+    }
+
+    [HttpDelete("{id:guid}/delete-account")]
+    [Authorize]
+    public async Task<IActionResult> DeleteAccount(Guid id)
+    {
+        return Ok(ApiResult<BaseResponseModel>.Success(await _userService.DeleteAccount(id)));
     }
 }

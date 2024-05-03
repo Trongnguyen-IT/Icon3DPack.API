@@ -15,5 +15,9 @@ public interface IUserService
     Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 
     Task<ProfileResponseModel> GetProfileAsync();
+
     Task<BaseResponseModel> UpdateProfileAsync(UpdateUserModel updateUserModel);
+
+    Task<BaseResponseModel> UpdateNotificationAsync(Guid userId, bool isNotification);
+    Task<BaseResponseModel> DeleteAccount(Guid userId);
 }

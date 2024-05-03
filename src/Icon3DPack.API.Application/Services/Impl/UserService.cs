@@ -163,4 +163,36 @@ public class UserService : IUserService
             Id = Guid.Parse(user.Id)
         };
     }
+
+    public async Task<BaseResponseModel> UpdateNotificationAsync(Guid userId, bool isNotification)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        user.ReceiveEmailNotification = isNotification;
+
+        await _userManager.UpdateAsync(user);
+
+        return new BaseResponseModel
+        {
+            Id = Guid.Parse(user.Id)
+        };
+    }
+
+    public async Task<BaseResponseModel> DeleteAccount(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        await _userManager.DeleteAsync(user);
+
+        return new BaseResponseModel
+        {
+            Id = Guid.Parse(user.Id)
+        };
+    }
 }
