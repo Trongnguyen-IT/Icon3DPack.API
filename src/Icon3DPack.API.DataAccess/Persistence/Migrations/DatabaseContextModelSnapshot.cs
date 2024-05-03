@@ -52,7 +52,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.CategoryTag", b =>
@@ -67,7 +67,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("CategoryTags");
+                    b.ToTable("CategoryTags", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileEntity", b =>
@@ -108,7 +108,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("FileEntities");
+                    b.ToTable("FileEntities", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.FileExtension", b =>
@@ -144,7 +144,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileExtensions");
+                    b.ToTable("FileExtensions", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Post", b =>
@@ -180,7 +180,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Product", b =>
@@ -221,7 +221,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.ProductTag", b =>
@@ -236,7 +236,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ProductTags");
+                    b.ToTable("ProductTags", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Tag", b =>
@@ -263,7 +263,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoItem", b =>
@@ -304,7 +304,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("TodoItems", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoList", b =>
@@ -332,7 +332,7 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TodoLists");
+                    b.ToTable("TodoLists", (string)null);
                 });
 
             modelBuilder.Entity("Icon3DPack.API.DataAccess.Identity.ApplicationUser", b =>

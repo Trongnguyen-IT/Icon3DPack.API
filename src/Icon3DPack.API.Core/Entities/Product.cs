@@ -13,8 +13,7 @@ namespace Icon3DPack.API.Core.Entities
         public Guid CategoryId { get; set; }
         public virtual Category Category { get; set; }
 
-        public virtual ICollection<FileEntity>? FileEntities { get; set; } = [];
-        public virtual ICollection<Tag>? Tags { get; set; } = [];
-        public virtual ICollection<ProductTag>? ProductTags { get; set; } = [];
+        public virtual ICollection<FileEntity> FileEntities { get; set; } = [];
+        public virtual ICollection<ProductTag> ProductTags { get; set; } = [];
     }
 }

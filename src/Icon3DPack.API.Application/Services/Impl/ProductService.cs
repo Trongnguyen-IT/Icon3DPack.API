@@ -32,14 +32,16 @@ namespace Icon3DPack.API.Application.Services.Impl
         {
             return await _productRepository.GetAllAsync(orderBy: p => p.OrderByDescending(pp => pp.CreatedTime),
                 include: p => p.Include(p => p.Category)
-                .Include(p => p.Tags));
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag));
         }
 
         public async Task<PaginationResult<Product>> GetAllPagingAsync()
         {
             return await _productRepository.GetPagedAsync(orderBy: p => p.OrderByDescending(pp => pp.CreatedTime),
                 include: p => p.Include(p => p.Category)
-                .Include(p => p.Tags));
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag));
         }
 
         public override async Task<Product> GetFirstAsync(Expression<Func<Product, bool>> predicate)
@@ -48,7 +50,8 @@ namespace Icon3DPack.API.Application.Services.Impl
                 predicate: predicate,
                 include: p => p.Include(p => p.Category)
                 .Include(p => p.FileEntities)
-                .Include(p => p.Tags));
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag));
 
             return ressult;
         }
@@ -85,7 +88,7 @@ namespace Icon3DPack.API.Application.Services.Impl
 
         public async Task<Product> UpdateAsync(ProductRequestModel model)
         {
-            var product = await _productRepository.GetFirstAsync(p => p.Id == model.Id, p => p.Include(pp => pp.ProductTags).Include(p=>p.FileEntities));
+            var product = await _productRepository.GetFirstAsync(p => p.Id == model.Id, p => p.Include(pp => pp.ProductTags).Include(p => p.FileEntities));
 
             if ((product == null)) throw new ResourceNotFoundException(typeof(Product));
 

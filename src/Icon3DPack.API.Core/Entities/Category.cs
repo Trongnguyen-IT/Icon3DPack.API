@@ -9,8 +9,6 @@ namespace Icon3DPack.API.Core.Entities
         public string? Slug { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } = [];
-
-        public virtual ICollection<Tag> Tags { get; set; } = [];
         public virtual ICollection<CategoryTag> CategoryTags { get; set; } = [];
     }
 }

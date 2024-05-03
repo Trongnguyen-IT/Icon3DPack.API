@@ -10,8 +10,12 @@ using Icon3DPack.API.AwsS3.Services;
 using Icon3DPack.API.DataAccess.Identity;
 using Icon3DPack.API.Shared.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using MimeKit.Encodings;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace Icon3DPack.API.Application.Services.Impl;
 
@@ -51,11 +55,12 @@ public class UserService : IUserService
         if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()?.Description);
 
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var code = EncodeHelper.Base64Encode(token);
 
         var emailTemplate = await _templateService.GetTemplateAsync(TemplateConstants.ConfirmationEmail);
 
         var emailBody = _templateService.ReplaceInTemplate(emailTemplate,
-            new Dictionary<string, string> { { "{Endpoint}", "http://localhost:3000" }, { "{UserId}", user.Id }, { "{Token}", token } });
+            new Dictionary<string, string> { { "{Endpoint}", "http://localhost:3000" }, { "{UserId}", user.Id }, { "{Token}", code } });
 
         await _emailService.SendEmailAsync(EmailMessage.Create(user.Email, emailBody, "[Icon3DPack.API]Confirm your email"));
 
@@ -96,7 +101,8 @@ public class UserService : IUserService
         if (user == null)
             throw new UnprocessableRequestException("Your verification link is incorrect");
 
-        var result = await _userManager.ConfirmEmailAsync(user, confirmEmailModel.Token);
+        var token = EncodeHelper.Base64Decode(confirmEmailModel.Token);
+        var result = await _userManager.ConfirmEmailAsync(user, token);
 
         if (!result.Succeeded)
             throw new UnprocessableRequestException("Your verification link has expired");
@@ -114,8 +120,7 @@ public class UserService : IUserService
         if (user == null)
             throw new NotFoundException("User does not exist anymore");
 
-        var result =
-            await _userManager.ChangePasswordAsync(user, changePasswordModel.OldPassword,
+        var result = await _userManager.ChangePasswordAsync(user, changePasswordModel.OldPassword,
                 changePasswordModel.NewPassword);
 
         if (!result.Succeeded)

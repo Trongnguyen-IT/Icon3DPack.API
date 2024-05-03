@@ -28,20 +28,22 @@ namespace Icon3DPack.API.Application.Services.Impl
         {
             return await _categoryRepository.GetAllAsync(orderBy: c => c.OrderBy(p => p.Id),
                 include: c => c.Include(cc => cc.Products)
-                .Include(p => p.Tags));
+                .Include(p => p.CategoryTags)
+                .ThenInclude(p => p.Tag));
         }
 
         public override async Task<Category> GetFirstAsync(Expression<Func<Category, bool>> predicate)
         {
             return await _categoryRepository.GetFirstAsync(predicate,
                include: c => c.Include(cc => cc.Products)
-               .Include(p => p.Tags));
+                .Include(p => p.CategoryTags)
+                .ThenInclude(p => p.Tag));
         }
-  
+
         public async Task<Category> UpdateAsync(CategoryRequestModel model)
         {
             var category = await _categoryRepository.GetFirstAsync(p => p.Id == model.Id, p => p.Include(p => p.CategoryTags));
-            
+
             if ((category == null)) throw new ResourceNotFoundException(typeof(Category));
 
             if (category.CategoryTags.Any()) _dbContext.CategoryTags.RemoveRange(category.CategoryTags);
