@@ -16,6 +16,6 @@ namespace Icon3DPack.API.Application.Models.FileExtension
         public string Name { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsPublish { get; set; }
-
+        public int? Order { get; set; }
     }
 }

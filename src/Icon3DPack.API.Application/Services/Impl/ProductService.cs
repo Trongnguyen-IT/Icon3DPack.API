@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.Product;
 using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
@@ -141,5 +142,15 @@ namespace Icon3DPack.API.Application.Services.Impl
             return result;
         }
 
+        public async Task<BaseResponseModel> DownloadFileAsync(Guid productId)
+        {
+            var product = await _productRepository.GetFirstAsync(p => p.Id == productId);
+
+            if ((product == null)) throw new ResourceNotFoundException(typeof(Product));
+            product.DownloadCount++;
+            await _productRepository.UpdateAsync(product);
+
+            return new BaseResponseModel { Id = productId };
+        }
     }
 }

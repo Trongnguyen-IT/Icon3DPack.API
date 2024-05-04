@@ -15,9 +15,9 @@ namespace Icon3DPack.API.AwsS3.Services.Impl
         {
             _s3Client = s3Client;
         }
-        public async Task<PutObjectResponse> UploadFileAsync(PutObjectRequest  putObjectRequest)
+        public async Task<PutObjectResponse> UploadFileAsync(PutObjectRequest putObjectRequest)
         {
-           return  await _s3Client.PutObjectAsync(putObjectRequest);
+            return await _s3Client.PutObjectAsync(putObjectRequest);
         }
 
         public async Task<S3ResponseDto> GetFileByKeyAsync(string bucketName, string key)
@@ -45,6 +45,23 @@ namespace Icon3DPack.API.AwsS3.Services.Impl
             }
             catch (Exception ex)
             {
+                throw new Exception(JsonConvert.SerializeObject(ex));
+            }
+        }
+
+        public async Task<GetObjectResponse> DownloadFile(string bucketName, string key)
+        {
+            try
+            {
+                var bucketExists = await _s3Client.DoesS3BucketExistAsync(bucketName);
+                if (!bucketExists) throw new Exception($"Bucket {bucketName} does not exist.");
+                var s3Object = await _s3Client.GetObjectAsync(bucketName, key);
+
+                return s3Object;
+            }
+            catch (AmazonS3Exception ex)
+            {
+                // Handle exception
                 throw new Exception(JsonConvert.SerializeObject(ex));
             }
         }

@@ -7,5 +7,6 @@ namespace Icon3DPack.API.AwsS3.Services
     {
         Task<PutObjectResponse> UploadFileAsync(PutObjectRequest putObjectRequest);
         Task<S3ResponseDto> GetFileByKeyAsync(string bucketName, string key);
+        Task<GetObjectResponse> DownloadFile(string bucketName, string key);
     }
 }

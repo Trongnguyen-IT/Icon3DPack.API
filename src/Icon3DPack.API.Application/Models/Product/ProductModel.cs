@@ -15,6 +15,8 @@ namespace Icon3DPack.API.Application.Models.Product
     
         public Guid CategoryId { get; set; }
         public string? Slug { get; set; }
+        public long DownloadCount { get; set; }
+
         public List<TagRequestModel>? Tags { get; set; } = new List<TagRequestModel>();
         public List<FileEntityRequestModel>? FileEntities { get; set; } = new List<FileEntityRequestModel>();
     }
@@ -28,6 +30,8 @@ namespace Icon3DPack.API.Application.Models.Product
         public Guid CategoryId { get; set; }
         public string? CategoryName { get; set; }
         public string? Slug { get; set; }
+        public long DownloadCount { get; set; }
+
         public List<TagResponseModel>? Tags { get; set; } = new List<TagResponseModel>();
         public List<FileEntityResponseModel>? FileEntities { get; set; } = new List<FileEntityResponseModel>();
     }

@@ -11,5 +11,10 @@ namespace Icon3DPack.API.Application.Services.Impl
         {
             _fileTypeRepository = fileTypeRepository;
         }
+
+        public override Task<IReadOnlyList<FileExtension>> GetAllAsync()
+        {
+            return _fileTypeRepository.GetAllAsync(orderBy: p => p.OrderByDescending(pp => pp.Order));
+        }
     }
 }
