@@ -53,20 +53,11 @@ namespace Icon3DPack.API.Host.Controllers
         }
 
         [HttpPost("product-filter")]
-        public async Task<IActionResult> ProductFilter([FromQuery] Dictionary<string, string> filter, int? pageNumber = 1, int? pageSize = 200)
+        public async Task<IActionResult> ProductFilter(ProductFilter filter)
         {
-            string name = filter.GetValueOrDefault("name");
-            string category = filter.GetValueOrDefault("categoryId");
-            string sortOrder = filter.GetValueOrDefault("sortOrder");
-
-            var paginationResult = await _productService.ProductFilter(filter, pageNumber: pageNumber ?? 1, pageSize: pageSize ?? 200);
-
-            var result = new PaginationResult<ProductResponseModel>(_mapper.Map<IReadOnlyList<ProductResponseModel>>(paginationResult.Items),
-                paginationResult.PageNumber,
-                paginationResult.PageSize,
-                paginationResult.TotalCount);
-
-            return Ok(ApiResult<PaginationResult<ProductResponseModel>>.Success(result));
+            var paginationResult = await _productService.ProductFilter(filter, pageNumber: filter.PageNumber, pageSize: filter.PageSize);
+           
+            return Ok(ApiResult<PaginationResult<ProductResponseModel>>.Success(paginationResult));
         }
 
         [HttpPost("{productId}/download-file")]

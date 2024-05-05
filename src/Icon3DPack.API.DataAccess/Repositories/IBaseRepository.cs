@@ -11,6 +11,10 @@ public interface IBaseRepository<TEntity> where TEntity : BaseEntity
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true);
 
+    IQueryable<TEntity> GetAllQueryable(Expression<Func<TEntity, bool>>? predicate = null,
+       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+       bool disableTracking = true);
+
     Task<PaginationResult<TEntity>> GetPagedAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
@@ -19,8 +23,7 @@ public interface IBaseRepository<TEntity> where TEntity : BaseEntity
         bool disableTracking = true);
 
     Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        bool disableTracking = true);
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
 
     Task<TEntity> AddAsync(TEntity entity);
 

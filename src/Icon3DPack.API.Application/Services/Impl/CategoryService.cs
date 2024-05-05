@@ -46,8 +46,6 @@ namespace Icon3DPack.API.Application.Services.Impl
 
             if ((category == null)) throw new ResourceNotFoundException(typeof(Category));
 
-            if (category.CategoryTags.Any()) _dbContext.CategoryTags.RemoveRange(category.CategoryTags);
-
             category?.CategoryTags.Clear();
 
             var updateCategory = _mapper.Map(model, category);

@@ -85,13 +85,29 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return new PaginationResult<TEntity>(items, pageNumber, pageSize, totalCount);
     }
 
-    public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate,
+    public IQueryable<TEntity> GetAllQueryable(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true)
     {
         IQueryable<TEntity> query = _dbSet;
 
-        if (disableTracking) query = query.Where(predicate).AsNoTracking();
+        if (predicate != null) query = query.Where(predicate);
+
+        if (disableTracking) query = query.AsNoTracking();
+
+        if (include != null) query = include(query);
+
+        if (predicate != null) query = query.Where(predicate);
+
+        return query;
+    }
+
+    public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        query = query.Where(predicate);
 
         if (include != null) query = include(query);
 
