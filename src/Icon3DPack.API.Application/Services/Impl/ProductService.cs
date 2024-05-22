@@ -75,7 +75,7 @@ namespace Icon3DPack.API.Application.Services.Impl
             return await _productRepository.DeleteAsync(product);
         }
 
-        public async Task<PaginationResult<ProductResponseModel>> ProductFilter(ProductFilter filter, int? pageNumber = 1, int? pageSize = 200)
+        public async Task<PaginationResult<ProductResponseModel>> ProductFilter(ProductFilter filter)
         {
             var query = _productRepository.GetAllQueryable(conditionPredicate(filter.Keyword, filter.CategoryId));
 
@@ -85,7 +85,7 @@ namespace Icon3DPack.API.Application.Services.Impl
                            _mapper.Map<IReadOnlyList<ProductResponseModel>>(await query.OrderAndPaging(filter).ToListAsync())
                             : new List<ProductResponseModel>();
 
-            return new PaginationResult<ProductResponseModel>(items, pageNumber ?? 1, pageSize ?? 200, totalCount);
+            return new PaginationResult<ProductResponseModel>(items, filter.PageNumber ?? 1, filter.PageSize ?? 200, totalCount);
         }
 
         public async Task<Product> UpdateAsync(ProductRequestModel model)

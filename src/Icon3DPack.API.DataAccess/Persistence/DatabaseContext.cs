@@ -14,7 +14,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IClaimService _claimService;
 
-    public DatabaseContext(DbContextOptions options, IClaimService claimService) : base(options)
+    public DatabaseContext(DbContextOptions<DatabaseContext> options, IClaimService claimService) : base(options)
     {
         _claimService = claimService;
     }
@@ -29,6 +29,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<Tag> Tags { get; set; }
     public DbSet<ProductTag> ProductTags { get; set; }
     public DbSet<CategoryTag> CategoryTags { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

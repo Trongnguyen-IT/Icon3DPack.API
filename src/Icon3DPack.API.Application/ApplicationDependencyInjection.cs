@@ -37,6 +37,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ITagService, TagService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
         if (env.IsDevelopment())
             services.AddScoped<IEmailService, EmailService>();

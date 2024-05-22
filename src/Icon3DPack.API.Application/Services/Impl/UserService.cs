@@ -7,6 +7,7 @@ using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Templates;
 using Icon3DPack.API.AwsS3.Models.AwsS3;
 using Icon3DPack.API.AwsS3.Services;
+using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.DataAccess.Identity;
 using Icon3DPack.API.Shared.Services;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,7 @@ public class UserService : IUserService
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IClaimService _claimService;
+    private readonly IRefreshTokenService _refreshTokenService;
 
     public UserService(IMapper mapper,
         UserManager<ApplicationUser> userManager,
@@ -35,7 +37,8 @@ public class UserService : IUserService
         IConfiguration configuration,
         ITemplateService templateService,
         IEmailService emailService,
-        IClaimService claimService)
+        IClaimService claimService,
+        IRefreshTokenService refreshTokenService)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -44,6 +47,7 @@ public class UserService : IUserService
         _templateService = templateService;
         _emailService = emailService;
         _claimService = claimService;
+        _refreshTokenService = refreshTokenService;
     }
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
@@ -85,6 +89,10 @@ public class UserService : IUserService
         var roles = await _userManager.GetRolesAsync(user);
 
         var token = JwtHelper.GenerateToken(user, roles, _configuration);
+
+        //var refreshToken = _refreshTokenService.GenerateRefreshToken(user);
+
+        //await _refreshTokenService.SaveRefreshToken(refreshToken);
 
         return new LoginResponseModel
         {

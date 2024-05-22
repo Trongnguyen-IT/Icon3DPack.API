@@ -55,7 +55,7 @@ namespace Icon3DPack.API.Host.Controllers
         [HttpPost("product-filter")]
         public async Task<IActionResult> ProductFilter(ProductFilter filter)
         {
-            var paginationResult = await _productService.ProductFilter(filter, pageNumber: filter.PageNumber, pageSize: filter.PageSize);
+            var paginationResult = await _productService.ProductFilter(filter);
            
             return Ok(ApiResult<PaginationResult<ProductResponseModel>>.Success(paginationResult));
         }

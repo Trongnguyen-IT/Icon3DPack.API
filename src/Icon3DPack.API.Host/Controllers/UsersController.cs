@@ -1,24 +1,44 @@
 ﻿using Amazon.Auth.AccessControlPolicy;
+using Azure.Core;
+using Icon3DPack.API.Application.Helpers;
 using Icon3DPack.API.Application.Models;
+using Icon3DPack.API.Application.Models.Authorization;
 using Icon3DPack.API.Application.Models.BaseModel;
 using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Services;
+using Icon3DPack.API.Application.Services.Impl;
+using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.DataAccess.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Icon3DPack.API.Host.Controllers;
 
 public class UsersController : ApiController
 {
     private readonly IUserService _userService;
+    private readonly IRefreshTokenService _refreshTokenService;
+    private readonly IConfiguration _configuration;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService,
+        IRefreshTokenService refreshTokenService,
+        UserManager<ApplicationUser> userManager,
+        IConfiguration configuration)
     {
         _userService = userService;
+        _refreshTokenService = refreshTokenService;
+        _userManager = userManager;
+        _configuration = configuration;
     }
 
     [HttpPost("register")]
@@ -78,5 +98,42 @@ public class UsersController : ApiController
     public async Task<IActionResult> DeleteAccount(Guid id)
     {
         return Ok(ApiResult<BaseResponseModel>.Success(await _userService.DeleteAccount(id)));
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequestModel model)
+    {
+        try
+        {
+            var principal = _refreshTokenService.GetPrincipalFromExpiredToken(model.AccessToken);
+            if (principal == null)
+            {
+                throw new Exception("Invalid access token!");
+            }
+
+            var validatedRefreshToken = _refreshTokenService.ValidateRefreshToken(model.RefreshToken);
+            if (validatedRefreshToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(validatedRefreshToken.UserId);
+
+            if (user == null || validatedRefreshToken.ExpiresAt <= DateTime.Now)
+            {
+                throw new Exception("Refresh token has expired!");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var token = JwtHelper.GenerateToken(user, roles, _configuration);
+
+            return Ok(new { AccessToken = token });
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
     }
 }
