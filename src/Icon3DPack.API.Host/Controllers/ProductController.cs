@@ -16,6 +16,7 @@ using Icon3DPack.API.AwsS3.Services;
 using Icon3DPack.API.Application.Models.File;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net;
+using Icon3DPack.API.Application.Models.Post;
 
 namespace Icon3DPack.API.Host.Controllers
 {
@@ -60,9 +61,9 @@ namespace Icon3DPack.API.Host.Controllers
             return Ok(ApiResult<PaginationResult<ProductResponseModel>>.Success(paginationResult));
         }
 
-        [HttpPost("{productId}/download-file")]
+        [HttpPost("{fileId}/download-file")]
         [Authorize]
-        public async Task<IActionResult> DownloadFile(Guid productId, FileDownloadRequest fileRequest)
+        public async Task<IActionResult> DownloadFile(Guid fileId, FileDownloadRequest fileRequest)
         {
             MemoryStream ms = null;
             try
@@ -85,7 +86,7 @@ namespace Icon3DPack.API.Host.Controllers
                     if (ms is null || ms.ToArray().Length < 1)
                         throw new FileNotFoundException(string.Format("The document '{0}' is not found", fileRequest.Key));
 
-                    await _productService.DownloadFileAsync(productId);
+                    await _productService.UpdateCountDownloadFileAsync(fileId);
 
                     // Return the file for download
                     return File(ms.ToArray(), response.Headers.ContentType, fileRequest.Key);
@@ -96,6 +97,12 @@ namespace Icon3DPack.API.Host.Controllers
                 // Handle exception
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
+        }
+
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            return Ok(ApiResult<ProductResponseModel>.Success(_mapper.Map<ProductResponseModel>(await _productService.GetBySlug(slug))));
         }
     }
 }

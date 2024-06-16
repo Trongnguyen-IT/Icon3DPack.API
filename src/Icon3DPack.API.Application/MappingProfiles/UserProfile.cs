@@ -10,6 +10,8 @@ public class UserProfile : Profile
     {
         CreateMap<CreateUserModel, ApplicationUser>();
         CreateMap<UpdateUserModel, ApplicationUser>();
+        CreateMap<UserRequestModel, ApplicationUser>();
+        CreateMap<ApplicationUser, UserResponsetModel>();
         CreateMap<ApplicationUser, ProfileResponseModel>();
     }
 }

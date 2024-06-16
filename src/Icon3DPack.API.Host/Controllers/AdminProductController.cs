@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Icon3DPack.API.Application.Models;
+using Icon3DPack.API.Application.Models.Paging;
 using Icon3DPack.API.Application.Models.Product;
 using Icon3DPack.API.Application.Services;
+using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Icon3DPack.API.Host.Controllers
@@ -22,6 +25,13 @@ namespace Icon3DPack.API.Host.Controllers
         //{
         //    return Ok(ApiResult<ProductResponseModel>.Success(_mapper.Map<ProductResponseModel>((await _productService.AddAsync(model)))));
         //}
+
+        [Authorize]
+        [HttpPost("products")]
+        public async Task<IActionResult> GetAll(BaseFilterDto filter)
+        {
+            return Ok(ApiResult<PaginationResult<ProductResponseModel>>.Success(await _productService.GetAllAsync(filter)));
+        }
 
         public override async Task<IActionResult> UpdateAsync(Guid id, ProductRequestModel model)
         {

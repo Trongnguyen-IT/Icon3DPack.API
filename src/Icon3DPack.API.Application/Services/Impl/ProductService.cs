@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using Amazon.S3.Model;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Icon3DPack.API.Application.Helpers;
 using Icon3DPack.API.Application.Models.BaseModel;
+using Icon3DPack.API.Application.Models.Paging;
 using Icon3DPack.API.Application.Models.Product;
 using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
@@ -10,6 +12,7 @@ using Icon3DPack.API.DataAccess.Persistence;
 using Icon3DPack.API.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Icon3DPack.API.Application.Services.Impl
 {
@@ -17,26 +20,40 @@ namespace Icon3DPack.API.Application.Services.Impl
     {
         private readonly ICategoryService _categoryService;
         private readonly IProductRepository _productRepository;
+        private readonly IBaseRepository<FileEntity> _fileRepository;
         private readonly IMapper _mapper;
         public readonly DatabaseContext _dbContext;
 
         public ProductService(IProductRepository productRepository,
             ICategoryService categoryService,
+            IBaseRepository<FileEntity> fileRepository,
             DatabaseContext dbContext,
             IMapper mapper) : base(productRepository)
         {
             _categoryService = categoryService;
             _productRepository = productRepository;
+            _fileRepository = fileRepository;
             _mapper = mapper;
             _dbContext = dbContext;
         }
 
-        public override async Task<IReadOnlyList<Product>> GetAllAsync()
+        public async Task<PaginationResult<ProductResponseModel>> GetAllAsync(BaseFilterDto filter)
         {
-            return await _productRepository.GetAllAsync(orderBy: p => p.OrderByDescending(pp => pp.CreatedTime),
-                include: p => p.Include(p => p.Category)
+            var query = _productRepository
+                .GetAll()
+                .Include(p => p.Category)
+                .Include(p => p.FileEntities)
                 .Include(p => p.ProductTags)
-                .ThenInclude(p => p.Tag));
+                .ThenInclude(p => p.Tag)
+                .WhereIf(filter.Keyword.IsNotNullOrEmpty(), p => p.Name.ToLower().Contains(filter.Keyword!.ToLower()));
+
+            var totalCount = await query.CountAsync();
+
+            var items = totalCount > 0 ?
+               _mapper.Map<IReadOnlyList<ProductResponseModel>>(await query.OrderAndPaging(filter).ToListAsync())
+                : new List<ProductResponseModel>();
+
+            return new PaginationResult<ProductResponseModel>(items, filter.PageNumber ?? 1, filter.PageSize ?? 200, totalCount);
         }
 
         public async Task<PaginationResult<Product>> GetAllPagingAsync()
@@ -77,7 +94,13 @@ namespace Icon3DPack.API.Application.Services.Impl
 
         public async Task<PaginationResult<ProductResponseModel>> ProductFilter(ProductFilter filter)
         {
-            var query = _productRepository.GetAllQueryable(conditionPredicate(filter.Keyword, filter.CategoryId));
+            var query = _productRepository.GetAll()
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag)
+                .WhereIf(filter.Keyword.IsNotNullOrEmpty(),
+                    p => p.Name!.Contains(filter.Keyword!)
+                    || p.ProductTags.Any(p => p.Tag.Name.Contains(filter.Keyword!)))
+                .WhereIf(filter.CategoryId != null && filter.CategoryId != Guid.Empty, p => p.CategoryId == filter.CategoryId);
 
             var totalCount = await query.CountAsync();
 
@@ -110,49 +133,29 @@ namespace Icon3DPack.API.Application.Services.Impl
             => (product => product.IsPublish && (string.IsNullOrEmpty(keyword) || product.Name.ToLower().Contains(keyword.ToLower()))
             && (categoryId == null || categoryId == Guid.Empty || product.CategoryId == categoryId));
 
-        private IOrderedQueryable<Product> OrderedlQuery(IQueryable<Product> query, string? sortOrder, string? sortDirection = "desc")
+        public async Task<Product> GetBySlug(string slug)
         {
-            //IOrderedQueryable<Product> result;
-            //return  query.OrderByDynamic(sortOrder);
-            return sortDirection == "desc" ? query.OrderByDescending(p => sortOrder) : query.OrderBy(p => sortOrder);
-            //if (!string.IsNullOrEmpty(sortOrder))
-            //{
-            //    switch (sortOrder)
-            //    {
-            //        case "name_asc":
-            //            result = query.OrderBy(p => sortOrder);
-            //            break;
-            //        case "name_desc":
-            //            result = query.OrderByDescending(p => p.Name);
-            //            break;
-            //        case "date_asc":
-            //            result = query.OrderBy(p => p.CreatedTime);
-            //            break;
-            //        case "date_desc":
-            //            result = query.OrderByDescending(p => p.CreatedTime);
-            //            break;
-            //        default:
-            //            result = query.OrderByDescending(p => p.ModifiedTime);
-            //            break;
-            //    }
-            //}
-            //else
-            //{
-            //    result = query.OrderByDescending(p => p.ModifiedTime);
-            //}
-
-            //return result;
-        }
-
-        public async Task<BaseResponseModel> DownloadFileAsync(Guid productId)
-        {
-            var product = await _productRepository.GetFirstAsync(p => p.Id == productId);
+            var product = await _productRepository.GetFirstAsync(
+                predicate: p => p.Slug == slug,
+                include: p => p.Include(p => p.Category)
+                .Include(p => p.FileEntities)
+                .Include(p => p.ProductTags)
+                .ThenInclude(p => p.Tag));
 
             if ((product == null)) throw new ResourceNotFoundException(typeof(Product));
-            product.DownloadCount++;
-            await _productRepository.UpdateAsync(product);
 
-            return new BaseResponseModel { Id = productId };
+            return product;
+        }
+
+        public async Task<BaseResponseModel> UpdateCountDownloadFileAsync(Guid fileId)
+        {
+            var fileEntity = await _fileRepository.GetFirstAsync(p => p.Id == fileId);
+
+            if ((fileEntity == null)) throw new ResourceNotFoundException(typeof(FileEntity));
+            fileEntity.DownloadCount++;
+            await _fileRepository.UpdateAsync(fileEntity);
+
+            return new BaseResponseModel { Id = fileId };
         }
     }
 }

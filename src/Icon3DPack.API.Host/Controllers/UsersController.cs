@@ -45,7 +45,7 @@ public class UsersController : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> RegisterAsync(CreateUserModel createUserModel)
     {
-        return Ok(ApiResult<CreateUserResponseModel>.Success(await _userService.CreateAsync(createUserModel)));
+        return Ok(ApiResult<CreateUserResponseModel>.Success(await _userService.RegisterAsync(createUserModel)));
     }
 
     [HttpPost("authenticate")]

@@ -23,11 +23,11 @@ namespace Icon3DPack.API.Host.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(ApiResult<IEnumerable<TResponse>>.Success(_mapper.Map<IEnumerable<TResponse>>(await _baseService.GetAllAsync())));
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    return Ok(ApiResult<IEnumerable<TResponse>>.Success(_mapper.Map<IEnumerable<TResponse>>(await _baseService.GetAllAsync())));
+        //}
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)

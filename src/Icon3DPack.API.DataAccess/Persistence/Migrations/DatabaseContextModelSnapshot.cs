@@ -82,6 +82,9 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
+
                     b.Property<Guid>("FileExtensionId")
                         .HasColumnType("char(36)");
 
@@ -372,6 +375,13 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -389,6 +399,12 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")

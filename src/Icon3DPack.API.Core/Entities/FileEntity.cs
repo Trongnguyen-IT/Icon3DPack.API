@@ -6,6 +6,7 @@ namespace Icon3DPack.API.Core.Entities
     {
         public string Name { get; set; }
         public string FileUrl { get; set; }
+        public long DownloadCount { get; set; }
 
         public Guid FileExtensionId { get; set; }
         public virtual FileExtension FileExtension { get; set; }

@@ -13,6 +13,7 @@ namespace Icon3DPack.API.Application.MappingProfiles
 
             CreateMap<Product, ProductResponseModel>()
                 .ForMember(p => p.CategoryName, s => s.MapFrom(pp => pp.Category.Name))
+                .ForMember(p => p.DownloadCount, s => s.MapFrom(pp => pp.FileEntities.Sum(p=>p.DownloadCount)))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags.Select(pt => pt.Tag)));
         }
     }

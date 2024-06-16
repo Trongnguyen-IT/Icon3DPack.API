@@ -6,6 +6,8 @@ namespace Icon3DPack.API.DataAccess.Repositories;
 
 public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {
+    IQueryable<TEntity> GetAll();
+
     Task<IReadOnlyList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,

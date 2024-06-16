@@ -3,15 +3,19 @@ using Icon3DPack.API.Application.Common.Email;
 using Icon3DPack.API.Application.Exceptions;
 using Icon3DPack.API.Application.Helpers;
 using Icon3DPack.API.Application.Models.BaseModel;
+using Icon3DPack.API.Application.Models.Paging;
+using Icon3DPack.API.Application.Models.Tag;
 using Icon3DPack.API.Application.Models.User;
 using Icon3DPack.API.Application.Templates;
 using Icon3DPack.API.AwsS3.Models.AwsS3;
 using Icon3DPack.API.AwsS3.Services;
+using Icon3DPack.API.Core.Common;
 using Icon3DPack.API.Core.Entities;
 using Icon3DPack.API.DataAccess.Identity;
 using Icon3DPack.API.Shared.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MimeKit.Encodings;
@@ -50,7 +54,7 @@ public class UserService : IUserService
         _refreshTokenService = refreshTokenService;
     }
 
-    public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
+    public async Task<CreateUserResponseModel> RegisterAsync(CreateUserModel createUserModel)
     {
         var user = _mapper.Map<ApplicationUser>(createUserModel);
         user.UserName = createUserModel.Email;
@@ -71,6 +75,46 @@ public class UserService : IUserService
         return new CreateUserResponseModel
         {
             Id = Guid.Parse((await _userManager.FindByEmailAsync(user.Email)).Id)
+        };
+    }
+
+    public async Task<UserResponsetModel> GetAsync(Guid id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        return _mapper.Map<UserResponsetModel>(user);
+
+    }
+
+    public async Task<BaseResponseModel> CreateAsync(UserRequestModel model)
+    {
+        var user = _mapper.Map<ApplicationUser>(model);
+        user.UserName = model.Email;
+        var result = await _userManager.CreateAsync(user, "Admin@123");
+
+        if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()?.Description);
+
+        return new BaseResponseModel
+        {
+            Id = Guid.Parse((await _userManager.FindByEmailAsync(user.Email)).Id)
+        };
+    }
+
+    public async Task<BaseResponseModel> UpdateAsync(Guid id, UserRequestModel model)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        var updateUser = _mapper.Map(model, user);
+
+        await _userManager.UpdateAsync(updateUser);
+
+        return new BaseResponseModel
+        {
+            Id = Guid.Parse(user.Id)
         };
     }
 
@@ -202,5 +246,17 @@ public class UserService : IUserService
         {
             Id = Guid.Parse(user.Id)
         };
+    }
+
+    public async Task<PaginationResult<ApplicationUser>> GetAll(BaseFilterDto filter)
+    {
+        var query = _userManager.Users
+               .WhereIf(filter.Keyword.IsNotNullOrEmpty(), p => p.Email!.Contains(filter.Keyword!));
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query.OrderAndPaging(filter).ToListAsync();
+
+        return new PaginationResult<ApplicationUser>(items, filter.PageNumber ?? 1, filter.PageSize ?? 10, totalCount);
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240426091749_Initial-commit")]
+    [Migration("20240616145410_Initial-commit")]
     partial class Initialcommit
     {
         /// <inheritdoc />
@@ -84,6 +84,9 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
 
                     b.Property<Guid>("FileExtensionId")
                         .HasColumnType("char(36)");
@@ -201,6 +204,9 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
 
@@ -240,6 +246,28 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("ProductTags");
+                });
+
+            modelBuilder.Entity("Icon3DPack.API.Core.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.Tag", b =>
@@ -350,6 +378,13 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -367,6 +402,12 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
@@ -598,17 +639,21 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.ProductTag", b =>
                 {
-                    b.HasOne("Icon3DPack.API.Core.Entities.Product", null)
+                    b.HasOne("Icon3DPack.API.Core.Entities.Product", "Product")
                         .WithMany("ProductTags")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", null)
+                    b.HasOne("Icon3DPack.API.Core.Entities.Tag", "Tag")
                         .WithMany("ProductTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Icon3DPack.API.Core.Entities.TodoItem", b =>

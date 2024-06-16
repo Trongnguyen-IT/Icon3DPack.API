@@ -19,6 +19,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         _dbSet = context.Set<TEntity>();
     }
 
+    public virtual IQueryable<TEntity> GetAll()
+    {
+        return _dbContext.Set<TEntity>().AsQueryable();
+    }
+
     public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
         entity.Id = Guid.NewGuid();
