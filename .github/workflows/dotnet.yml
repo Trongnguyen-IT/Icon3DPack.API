@@ -24,7 +24,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore Icon3DPack.API.sln
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build Icon3DPack.API.sln --configuration Release
     - name: Publish
       run: dotnet publish Icon3DPack.API.sln -c Release
     - name: Test
