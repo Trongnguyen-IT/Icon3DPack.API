@@ -376,7 +376,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedTime")

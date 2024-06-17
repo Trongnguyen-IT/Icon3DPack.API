@@ -8,7 +8,7 @@ public class ApplicationUser : IdentityUser, IAuditedEntity
     public string? ImageUrl { get; set; }
     public string? FullName { get; set; }
     public bool ReceiveEmailNotification { get; set; }
-    public string CreatedBy { get ; set ; }
+    public string? CreatedBy { get ; set ; }
     public DateTime CreatedTime { get ; set ; }
     public string? ModifiedBy { get ; set ; }
     public DateTime? ModifiedTime { get ; set ; }

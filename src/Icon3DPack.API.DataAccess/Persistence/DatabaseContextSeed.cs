@@ -23,7 +23,7 @@ public static class DatabaseContextSeed
 
         if (!userManager.Users.Any())
         {
-            var user = new ApplicationUser { UserName = "admin", Email = "admin@admin.com", EmailConfirmed = true };
+            var user = new ApplicationUser { UserName = "admin", Email = "admin@admin.com", EmailConfirmed = true, CreatedTime = DateTime.UtcNow };
 
             IdentityResult result = await userManager.CreateAsync(user, "Admin@123");
 

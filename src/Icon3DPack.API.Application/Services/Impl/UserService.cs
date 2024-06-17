@@ -21,6 +21,7 @@ using Microsoft.Extensions.Options;
 using MimeKit.Encodings;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace Icon3DPack.API.Application.Services.Impl;
 
@@ -57,6 +58,7 @@ public class UserService : IUserService
     public async Task<CreateUserResponseModel> RegisterAsync(CreateUserModel createUserModel)
     {
         var user = _mapper.Map<ApplicationUser>(createUserModel);
+        //user.Id = Guid.NewGuid().ToString();
         user.UserName = createUserModel.Email;
         var result = await _userManager.CreateAsync(user, createUserModel.Password);
 
@@ -92,6 +94,8 @@ public class UserService : IUserService
     {
         var user = _mapper.Map<ApplicationUser>(model);
         user.UserName = model.Email;
+        user.EmailConfirmed = true;
+        user.CreatedBy = _claimService.GetUserId();
         var result = await _userManager.CreateAsync(user, "Admin@123");
 
         if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()?.Description);

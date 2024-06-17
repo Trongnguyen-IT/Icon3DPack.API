@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Icon3DPack.API.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240616145410_Initial-commit")]
+    [Migration("20240617085348_Initial-commit")]
     partial class Initialcommit
     {
         /// <inheritdoc />
@@ -379,7 +379,6 @@ namespace Icon3DPack.API.DataAccess.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedTime")
