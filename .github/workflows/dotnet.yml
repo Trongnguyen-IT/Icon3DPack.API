@@ -26,6 +26,6 @@ jobs:
     - name: Build
       run: dotnet build Icon3DPack.API.sln --configuration Release
     - name: Publish
-      run: dotnet publish Icon3DPack.API.sln -c Release
+      run: dotnet publish Icon3DPack.API.sln -o publish -c Release
     - name: Test
       run: dotnet test Icon3DPack.API.sln --no-build --verbosity normal
