@@ -72,7 +72,7 @@ public class UserService : IUserService
         var emailBody = _templateService.ReplaceInTemplate(emailTemplate,
             new Dictionary<string, string> { { "{Endpoint}", "http://localhost:3000" }, { "{UserId}", user.Id }, { "{Token}", code } });
 
-        await _emailService.SendEmailAsync(EmailMessage.Create(user.Email, emailBody, "[Icon3DPack.API]Confirm your email"));
+        _ = _emailService.SendEmailAsync(EmailMessage.Create(user.Email, emailBody, "[Icon3DPack.API]Confirm your email"));
 
         return new CreateUserResponseModel
         {

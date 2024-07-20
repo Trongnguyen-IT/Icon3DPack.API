@@ -72,5 +72,14 @@ namespace Icon3DPack.API.Application.Services.Impl
 
             return await _categoryRepository.UpdateAsync(updateCategory);
         }
+
+        public async Task<Category> GetBySlug(string slug)
+        {
+            var category = await _categoryRepository.GetFirstAsync(p => p.Slug == slug);
+
+            if ((category == null)) throw new ResourceNotFoundException(typeof(Category));
+
+            return category;
+        }
     }
 }

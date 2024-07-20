@@ -97,6 +97,7 @@ namespace Icon3DPack.API.Application.Services.Impl
             var query = _productRepository.GetAll()
                 .Include(p => p.ProductTags)
                 .ThenInclude(p => p.Tag)
+                .Where(p=>p.IsPublish)
                 .WhereIf(filter.Keyword.IsNotNullOrEmpty(),
                     p => p.Name!.Contains(filter.Keyword!)
                     || p.ProductTags.Any(p => p.Tag.Name.Contains(filter.Keyword!)))

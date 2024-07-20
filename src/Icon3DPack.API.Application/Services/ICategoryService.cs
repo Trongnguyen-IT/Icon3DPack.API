@@ -10,6 +10,7 @@ namespace Icon3DPack.API.Application.Services
     {
         Task<PaginationResult<CategoryResponseModel>> GetAllAsync(BaseFilterDto filter);
         Task<Category> UpdateAsync(CategoryRequestModel model);
+        Task<Category> GetBySlug(string slug);
         //Task IncreateProductAmountAsync(Guid categoryId);
         //Task DecreaseProductAmountAsync(Guid categoryId);
     }
